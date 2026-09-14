@@ -27,7 +27,10 @@ and [CONTRIBUTING.md](CONTRIBUTING.md).
 
 The website homepage and download section publish the project's
 [Code signing policy](https://namlauncher.nattapat2871.me/#code-signing-policy),
-including the SignPath Foundation attribution, team roles, signing scope, and
-Privacy Notice link.
+including its open-source status, the pending SignPath Foundation application,
+the unsigned status of the current public installer, team roles, signing scope,
+and Privacy Notice link. Direct links such as
+[Download](https://namlauncher.nattapat2871.me/#download) remain aligned while
+asynchronous homepage content finishes loading.
 
 Author/creator: [nattapat2871](https://nattapat2871.me)

@@ -37,7 +37,7 @@
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
     <link rel="apple-touch-icon" href="/assets/namlauncher-icon.png" />
     <link rel="stylesheet" href="/assets/heroui-v3.min.css?v=3.2.3-namlauncher1" />
-    <link rel="stylesheet" href="/assets/styles.css?v=release-20260913-1.2.3-site3" />
+    <link rel="stylesheet" href="/assets/styles.css?v=release-20260914-1.2.3-site4" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -781,7 +781,7 @@
       <section id="developer" class="section developer-section">
         <div class="section-heading">
           <p class="eyebrow" data-i18n="developer.eyebrow">Built by Nattapat2871</p>
-          <h2 data-i18n="developer.title">One developer, one project, and public release notes.</h2>
+          <h2 data-i18n="developer.title">A solo student project, developed privately before going open source.</h2>
         </div>
 
         <div class="creator-layout">
@@ -798,18 +798,18 @@
                 <img id="creatorDecoration" class="creator-decoration" alt="" hidden />
               </span>
               <div>
-                <span class="creator-role" data-i18n="developer.role">Creator and lead developer</span>
+                <span class="creator-role" data-i18n="developer.role">Solo student developer and maintainer</span>
                 <h3 id="creatorName">Nattapat2871</h3>
                 <span id="creatorUsername" class="creator-username">@nattapat2871</span>
               </div>
             </div>
             <p class="creator-description" data-i18n="developer.body">
-              Nattapat2871 designs the launcher, writes the desktop and website code, prepares releases, and follows up on reports from players.
+              Nattapat2871 began developing NamLauncher privately in June 2026 while learning software engineering and experimenting with Minecraft tooling. The launcher is built and maintained by one student, and its desktop source is now published under the GPL-3.0 license in the NamLauncher GitHub organization.
             </p>
             <div class="creator-responsibilities" aria-label="Project responsibilities" data-i18n-aria-label="developer.responsibilities.aria">
-              <span data-i18n="developer.responsibilities.product">Product decisions</span>
-              <span data-i18n="developer.responsibilities.engineering">Launcher and server code</span>
-              <span data-i18n="developer.responsibilities.design">Interface and website</span>
+              <span data-i18n="developer.responsibilities.product">Private development since June 2026</span>
+              <span data-i18n="developer.responsibilities.engineering">Solo student-maintained</span>
+              <span data-i18n="developer.responsibilities.design">Public GPL-3.0 launcher source</span>
             </div>
             <div class="creator-actions">
               <a class="button button--primary primary-action is-compact" href="https://nattapat2871.me" rel="me">
@@ -817,6 +817,9 @@
               </a>
               <a class="button button--outline secondary-action is-compact" href="https://github.com/Nattapat2871" target="_blank" rel="noopener">
                 <span data-i18n="developer.github">GitHub</span>
+              </a>
+              <a class="button button--outline secondary-action is-compact" href="https://github.com/NamLauncher/NamLauncher" target="_blank" rel="noopener">
+                <span data-i18n="developer.source">NamLauncher source</span>
               </a>
             </div>
           </article>
@@ -968,12 +971,20 @@
         <div class="signing-policy-heading">
           <p class="eyebrow" data-i18n="signing.eyebrow">Release trust</p>
           <h2 id="code-signing-policy-title" data-i18n="signing.title">Code signing policy</h2>
-          <p data-i18n="signing.attribution">Free code signing provided by SignPath.io, certificate by SignPath Foundation.</p>
+          <span class="signing-status" data-i18n="signing.status">Application pending review</span>
+          <p class="signing-attribution">
+            <strong data-i18n="signing.attributionLead">Planned provider after approval</strong>
+            <span data-i18n="signing.attribution">Free code signing provided by SignPath.io, certificate by SignPath Foundation.</span>
+          </p>
         </div>
         <article class="card card--secondary signing-policy-card">
           <p data-i18n="signing.scope">
-            NamLauncher signs only official Windows release artifacts built from its own public source and public build scripts. Every signing request requires a separate manual approval and never publishes a release by itself.
+            NamLauncher has applied to use SignPath Foundation for code signing. The current public installer remains unsigned. If approved, future official Windows releases will be signed through SignPath.io with a certificate issued by SignPath Foundation.
           </p>
+          <div class="signing-project-status">
+            <strong data-i18n="signing.openSource">Open-source project status</strong>
+            <span data-i18n="signing.openSourceBody">Development began privately in June 2026. The launcher source and its build workflow are now public under GPL-3.0 in the official NamLauncher GitHub organization.</span>
+          </div>
           <div class="signing-policy-roles" aria-label="Code signing team roles" data-i18n-aria-label="signing.rolesAria">
             <span><strong data-i18n="signing.authors">Authors and committers</strong><a href="https://github.com/Nattapat2871" rel="me">Nattapat2871</a></span>
             <span><strong data-i18n="signing.reviewers">Reviewers</strong><a href="https://github.com/Nattapat2871" rel="me">Nattapat2871</a></span>
@@ -983,6 +994,8 @@
             <a class="button button--primary button--sm" href="https://github.com/NamLauncher/NamLauncher/blob/main/CODE_SIGNING_POLICY.md" target="_blank" rel="noopener" data-i18n="signing.fullPolicy">Read the full policy</a>
             <a class="button button--outline button--sm" href="/legal" data-i18n="signing.privacy">Privacy Notice</a>
             <a class="button button--outline button--sm" href="https://github.com/NamLauncher/NamLauncher" target="_blank" rel="noopener" data-i18n="signing.source">Public source</a>
+            <a class="button button--ghost button--sm" href="https://signpath.io/" target="_blank" rel="noopener" data-i18n="signing.signpath">SignPath.io</a>
+            <a class="button button--ghost button--sm" href="https://signpath.org/" target="_blank" rel="noopener" data-i18n="signing.foundation">SignPath Foundation</a>
           </div>
         </article>
       </section>
@@ -1018,6 +1031,6 @@
       </span>
     </footer>
 
-  <script src="/assets/app.js?v=release-20260913-1.2.3-site3" defer></script>
+  <script src="/assets/app.js?v=release-20260914-1.2.3-site4" defer></script>
   </body>
 </html>
