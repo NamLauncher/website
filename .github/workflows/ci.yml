@@ -1,0 +1,21 @@
+name: Website CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - run: node --test contract-tests/*.test.mjs
+
+# Author/creator: nattapat2871 (https://nattapat2871.me)

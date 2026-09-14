@@ -1,0 +1,9 @@
+# Author/creator: nattapat2871 (https://nattapat2871.me)
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /download/
+Disallow: /legal.json
+Disallow: /status
+
+Sitemap: https://namlauncher.nattapat2871.me/sitemap.xml
