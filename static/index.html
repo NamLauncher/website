@@ -939,6 +939,7 @@
           </p>
           <p id="downloadStatus" class="download-status" role="status" aria-live="polite"></p>
           <a class="button button--outline button--sm download-guide-link" href="/how-to-install" data-i18n="download.installGuide">Read installation guide</a>
+          <a class="button button--ghost button--sm download-guide-link" href="#code-signing-policy" data-i18n="download.codeSigningPolicy">Code signing policy</a>
         </div>
         <div class="download-picker download-picker-section" data-download-picker>
           <button class="button button--primary button--lg primary-action download-primary" type="button" data-primary-download disabled>
@@ -961,6 +962,29 @@
           </button>
           <div class="download-menu" data-download-menu role="menu" popover="manual" hidden></div>
         </div>
+      </section>
+
+      <section id="code-signing-policy" class="section signing-policy-section" aria-labelledby="code-signing-policy-title">
+        <div class="signing-policy-heading">
+          <p class="eyebrow" data-i18n="signing.eyebrow">Release trust</p>
+          <h2 id="code-signing-policy-title" data-i18n="signing.title">Code signing policy</h2>
+          <p data-i18n="signing.attribution">Free code signing provided by SignPath.io, certificate by SignPath Foundation.</p>
+        </div>
+        <article class="card card--secondary signing-policy-card">
+          <p data-i18n="signing.scope">
+            NamLauncher signs only official Windows release artifacts built from its own public source and public build scripts. Every signing request requires a separate manual approval and never publishes a release by itself.
+          </p>
+          <div class="signing-policy-roles" aria-label="Code signing team roles" data-i18n-aria-label="signing.rolesAria">
+            <span><strong data-i18n="signing.authors">Authors and committers</strong><a href="https://github.com/Nattapat2871" rel="me">Nattapat2871</a></span>
+            <span><strong data-i18n="signing.reviewers">Reviewers</strong><a href="https://github.com/Nattapat2871" rel="me">Nattapat2871</a></span>
+            <span><strong data-i18n="signing.approvers">Approvers</strong><a href="https://github.com/Nattapat2871" rel="me">Nattapat2871</a></span>
+          </div>
+          <div class="signing-policy-actions">
+            <a class="button button--primary button--sm" href="https://github.com/NamLauncher/NamLauncher/blob/main/CODE_SIGNING_POLICY.md" target="_blank" rel="noopener" data-i18n="signing.fullPolicy">Read the full policy</a>
+            <a class="button button--outline button--sm" href="/legal" data-i18n="signing.privacy">Privacy Notice</a>
+            <a class="button button--outline button--sm" href="https://github.com/NamLauncher/NamLauncher" target="_blank" rel="noopener" data-i18n="signing.source">Public source</a>
+          </div>
+        </article>
       </section>
     </main>
 
@@ -989,7 +1013,8 @@
         Main site: <a href="https://nattapat2871.me" rel="me">nattapat2871.me</a> /
         <a href="/how-to-install">Installation guide</a> /
         <a href="/discord">Discord</a> /
-        <a href="/legal">Terms & Privacy</a>
+        <a href="/legal">Terms & Privacy</a> /
+        <a href="#code-signing-policy">Code signing policy</a>
       </span>
     </footer>
 
