@@ -22,6 +22,10 @@ let motionObserver = null;
 let layoutMotionFrame = 0;
 let layoutMotionTimer = null;
 let resizeMotionTimer = null;
+let hashAlignmentDeadline = 0;
+let hashAlignmentFrame = 0;
+let hashAlignmentTimer = null;
+let hashLayoutObserver = null;
 const layoutMotionRects = new Map();
 const layoutMotionAnimations = new WeakMap();
 const FORCE_RICH_MOTION = true;
@@ -222,15 +226,16 @@ const translations = {
     "screenshots.createInstance.body": "Name the instance, choose Minecraft and a loader, set its folder, and create it.",
     "screenshots.createInstance.open": "Open the full-size NamLauncher Create Instance screenshot (opens in a new tab)",
     "developer.eyebrow": "Built by Nattapat2871",
-    "developer.title": "One developer, one project, and public release notes.",
-    "developer.role": "Creator and lead developer",
-    "developer.body": "Nattapat2871 designs the launcher, writes the desktop and website code, prepares releases, and follows up on reports from players.",
+    "developer.title": "A solo student project, developed privately before going open source.",
+    "developer.role": "Solo student developer and maintainer",
+    "developer.body": "Nattapat2871 began developing NamLauncher privately in June 2026 while learning software engineering and experimenting with Minecraft tooling. The launcher is built and maintained by one student, and its desktop source is now published under the GPL-3.0 license in the NamLauncher GitHub organization.",
     "developer.responsibilities.aria": "Project responsibilities",
-    "developer.responsibilities.product": "Product decisions",
-    "developer.responsibilities.engineering": "Launcher and server code",
-    "developer.responsibilities.design": "Interface and website",
+    "developer.responsibilities.product": "Private development since June 2026",
+    "developer.responsibilities.engineering": "Solo student-maintained",
+    "developer.responsibilities.design": "Public GPL-3.0 launcher source",
     "developer.website": "Open personal website",
     "developer.github": "GitHub",
+    "developer.source": "NamLauncher source",
     "partner.eyebrow": "Partner server",
     "partner.ownedEyebrow": "NamLauncher server",
     "partner.aria": "NamLauncher server partners",
@@ -286,8 +291,12 @@ const translations = {
     "download.detected": "Detected: {platform}",
     "signing.eyebrow": "Release trust",
     "signing.title": "Code signing policy",
+    "signing.status": "Application pending review",
+    "signing.attributionLead": "Planned provider after approval",
     "signing.attribution": "Free code signing provided by SignPath.io, certificate by SignPath Foundation.",
-    "signing.scope": "NamLauncher signs only official Windows release artifacts built from its own public source and public build scripts. Every signing request requires a separate manual approval and never publishes a release by itself.",
+    "signing.scope": "NamLauncher has applied to use SignPath Foundation for code signing. The current public installer remains unsigned. If approved, future official Windows releases will be signed through SignPath.io with a certificate issued by SignPath Foundation.",
+    "signing.openSource": "Open-source project status",
+    "signing.openSourceBody": "Development began privately in June 2026. The launcher source and its build workflow are now public under GPL-3.0 in the official NamLauncher GitHub organization.",
     "signing.rolesAria": "Code signing team roles",
     "signing.authors": "Authors and committers",
     "signing.reviewers": "Reviewers",
@@ -295,6 +304,8 @@ const translations = {
     "signing.fullPolicy": "Read the full policy",
     "signing.privacy": "Privacy Notice",
     "signing.source": "Public source",
+    "signing.signpath": "SignPath.io",
+    "signing.foundation": "SignPath Foundation",
     "status.startingDownload": "Starting download...",
     "status.openingInstaller": "Opening installer...",
     "status.openingUnsignedDmg": "Downloading an unsigned DMG. Verify SHA-256 before opening and approve only this app in Gatekeeper.",
@@ -557,15 +568,16 @@ const translations = {
     "screenshots.createInstance.body": "ตั้งชื่อ เลือก Minecraft และตัวโหลด กำหนดโฟลเดอร์ แล้วสร้างอินสแตนซ์ได้เลย",
     "screenshots.createInstance.open": "เปิดภาพหน้าจอสร้างอินสแตนซ์ของ NamLauncher แบบเต็มขนาด (เปิดในแท็บใหม่)",
     "developer.eyebrow": "สร้างโดย Nattapat2871",
-    "developer.title": "ผู้พัฒนาคนเดียว ดูแลโปรเจกต์เดียว พร้อมบันทึกการอัปเดตที่ตรวจสอบได้",
-    "developer.role": "ผู้สร้างและนักพัฒนาหลัก",
-    "developer.body": "Nattapat2871 ออกแบบลันเชอร์ เขียนระบบเดสก์ท็อปและเว็บไซต์ เตรียมไฟล์แต่ละรุ่น และติดตามปัญหาที่ผู้เล่นแจ้งเข้ามา",
+    "developer.title": "โปรเจกต์ของนักศึกษาที่พัฒนาคนเดียว จากงาน private สู่ open source",
+    "developer.role": "นักศึกษาผู้พัฒนาและดูแลโครงการเพียงคนเดียว",
+    "developer.body": "Nattapat2871 เริ่มพัฒนา NamLauncher แบบ private ตั้งแต่เดือนมิถุนายน 2026 เพื่อเรียนรู้วิศวกรรมซอฟต์แวร์และทดลองสร้างเครื่องมือ Minecraft ปัจจุบันลันเชอร์ยังคงสร้างและดูแลโดยนักศึกษาคนเดียว และเผยแพร่ซอร์สเดสก์ท็อปภายใต้สัญญาอนุญาต GPL-3.0 ในองค์กร NamLauncher บน GitHub แล้ว",
     "developer.responsibilities.aria": "หน้าที่ในโปรเจกต์",
-    "developer.responsibilities.product": "ตัดสินใจด้านผลิตภัณฑ์",
-    "developer.responsibilities.engineering": "โค้ดลันเชอร์และเซิร์ฟเวอร์",
-    "developer.responsibilities.design": "หน้าตาโปรแกรมและเว็บไซต์",
+    "developer.responsibilities.product": "พัฒนาแบบ private ตั้งแต่มิถุนายน 2026",
+    "developer.responsibilities.engineering": "ดูแลโดยนักศึกษาคนเดียว",
+    "developer.responsibilities.design": "ซอร์สลันเชอร์ GPL-3.0 แบบสาธารณะ",
     "developer.website": "เปิดเว็บไซต์ส่วนตัว",
     "developer.github": "GitHub",
+    "developer.source": "ซอร์ส NamLauncher",
     "partner.eyebrow": "เซิร์ฟเวอร์พาร์ทเนอร์",
     "partner.ownedEyebrow": "เซิร์ฟเวอร์ของ NamLauncher",
     "partner.aria": "รายชื่อเซิร์ฟเวอร์พาร์ทเนอร์ของ NamLauncher",
@@ -621,8 +633,12 @@ const translations = {
     "download.detected": "ตรวจพบ: {platform}",
     "signing.eyebrow": "ความน่าเชื่อถือของไฟล์เผยแพร่",
     "signing.title": "Code signing policy",
+    "signing.status": "ยื่นใบสมัครแล้วและอยู่ระหว่างตรวจสอบ",
+    "signing.attributionLead": "ผู้ให้บริการที่วางแผนใช้หลังได้รับอนุมัติ",
     "signing.attribution": "Free code signing provided by SignPath.io, certificate by SignPath Foundation.",
-    "signing.scope": "NamLauncher ลงลายเซ็นเฉพาะไฟล์เผยแพร่ทางการสำหรับ Windows ที่สร้างจากซอร์สและสคริปต์ build สาธารณะของโครงการเอง ทุกคำขอลงลายเซ็นต้องได้รับการอนุมัติด้วยตนเองแยกต่างหาก และการลงลายเซ็นจะไม่เผยแพร่เวอร์ชันโดยอัตโนมัติ",
+    "signing.scope": "NamLauncher ได้ยื่นสมัครขอใช้ SignPath Foundation สำหรับการลงลายเซ็นโค้ดแล้ว ตัวติดตั้งสาธารณะในปัจจุบันยังไม่มีลายเซ็น หากได้รับอนุมัติ ไฟล์ Windows รุ่นทางการในอนาคตจะลงลายเซ็นผ่าน SignPath.io ด้วยใบรับรองที่ออกโดย SignPath Foundation",
+    "signing.openSource": "สถานะโครงการ Open Source",
+    "signing.openSourceBody": "โครงการเริ่มพัฒนาแบบ private ตั้งแต่มิถุนายน 2026 ปัจจุบันซอร์สลันเชอร์และขั้นตอน build เผยแพร่ต่อสาธารณะภายใต้ GPL-3.0 ในองค์กร NamLauncher บน GitHub แล้ว",
     "signing.rolesAria": "บทบาททีมลงลายเซ็นโค้ด",
     "signing.authors": "ผู้เขียนและผู้ commit",
     "signing.reviewers": "ผู้ตรวจทาน",
@@ -630,6 +646,8 @@ const translations = {
     "signing.fullPolicy": "อ่านนโยบายฉบับเต็ม",
     "signing.privacy": "ประกาศความเป็นส่วนตัว",
     "signing.source": "ซอร์สสาธารณะ",
+    "signing.signpath": "SignPath.io",
+    "signing.foundation": "SignPath Foundation",
     "status.startingDownload": "กำลังเริ่มดาวน์โหลด...",
     "status.openingInstaller": "กำลังเปิดตัวติดตั้ง...",
     "status.openingUnsignedDmg": "กำลังดาวน์โหลด DMG แบบ unsigned โปรดตรวจ SHA-256 ก่อนเปิด และอนุญาตเฉพาะแอปนี้ใน Gatekeeper",
@@ -2073,6 +2091,58 @@ function updateBackToTop() {
   button.tabIndex = visible ? 0 : -1;
 }
 
+function currentHashTarget() {
+  const rawHash = window.location.hash.slice(1);
+  if (!rawHash) return null;
+  try {
+    return document.getElementById(decodeURIComponent(rawHash));
+  } catch {
+    return document.getElementById(rawHash);
+  }
+}
+
+function cancelInitialHashAlignment() {
+  hashAlignmentDeadline = 0;
+  if (hashAlignmentFrame) window.cancelAnimationFrame(hashAlignmentFrame);
+  if (hashAlignmentTimer) window.clearTimeout(hashAlignmentTimer);
+  hashAlignmentFrame = 0;
+  hashAlignmentTimer = null;
+  hashLayoutObserver?.disconnect();
+  hashLayoutObserver = null;
+}
+
+function queueHashAlignment() {
+  if (!hashAlignmentDeadline || performance.now() > hashAlignmentDeadline || hashAlignmentFrame) return;
+  hashAlignmentFrame = window.requestAnimationFrame(() => {
+    hashAlignmentFrame = 0;
+    const target = currentHashTarget();
+    if (!target) {
+      cancelInitialHashAlignment();
+      return;
+    }
+    target.scrollIntoView({ behavior: "auto", block: "start" });
+    if (performance.now() < hashAlignmentDeadline) {
+      if (hashAlignmentTimer) window.clearTimeout(hashAlignmentTimer);
+      hashAlignmentTimer = window.setTimeout(queueHashAlignment, 500);
+    } else {
+      cancelInitialHashAlignment();
+    }
+  });
+}
+
+function startInitialHashAlignment() {
+  cancelInitialHashAlignment();
+  if (!currentHashTarget()) return;
+  hashAlignmentDeadline = performance.now() + 8000;
+  if (typeof ResizeObserver !== "undefined") {
+    hashLayoutObserver = new ResizeObserver(queueHashAlignment);
+    const layoutRoot = document.querySelector("main");
+    if (layoutRoot) hashLayoutObserver.observe(layoutRoot);
+  }
+  queueHashAlignment();
+  document.fonts?.ready?.then(queueHashAlignment).catch(() => {});
+}
+
 function bindEvents() {
   elements.themeToggle?.addEventListener("click", () => {
     const nextTheme = activeTheme === "dark" ? "light" : "dark";
@@ -2128,6 +2198,9 @@ function bindEvents() {
     if (elements.siteHeader && !elements.siteHeader.contains(event.target)) setMobileNavigation(false);
   });
   document.addEventListener("keydown", (event) => {
+    if (["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "].includes(event.key)) {
+      cancelInitialHashAlignment();
+    }
     if (event.key === "Escape") {
       closeDownloadMenus();
       if (elements.mobileMenuToggle?.getAttribute("aria-expanded") === "true") {
@@ -2156,6 +2229,10 @@ function bindEvents() {
       scrollFrame = 0;
     });
   }, { passive: true });
+  window.addEventListener("hashchange", startInitialHashAlignment);
+  window.addEventListener("wheel", cancelInitialHashAlignment, { passive: true });
+  window.addEventListener("touchstart", cancelInitialHashAlignment, { passive: true });
+  window.addEventListener("pointerdown", cancelInitialHashAlignment, { passive: true });
   updateBackToTop();
 }
 
@@ -2336,6 +2413,7 @@ function init() {
   refreshLiveNumbers({ recordView: true }).catch(() => setStatusKey("status.statsOffline", true));
   bindEvents();
   setupMotion();
+  startInitialHashAlignment();
 
   loadRelease().catch(() => {
     latestRelease = { artifacts: [] };
@@ -2347,7 +2425,9 @@ function init() {
 }
 
 document.addEventListener("DOMContentLoaded", init);
+window.addEventListener("load", queueHashAlignment);
 window.addEventListener("pagehide", () => {
+  cancelInitialHashAlignment();
   motionObserver?.disconnect();
   window.cancelAnimationFrame(layoutMotionFrame);
   window.clearTimeout(layoutMotionTimer);

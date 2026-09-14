@@ -2118,10 +2118,44 @@ h3 {
   margin-top: 12px;
 }
 
-.signing-policy-heading > p:last-child {
+.signing-status {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  border: 1px solid color-mix(in oklab, var(--warning) 46%, var(--line-strong));
+  border-radius: 999px;
+  padding: 7px 12px;
+  background: color-mix(in oklab, var(--warning) 13%, var(--surface-secondary));
+  color: color-mix(in oklab, var(--warning) 78%, var(--text));
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.signing-status::before {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--warning);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--warning) 18%, transparent);
+  content: "";
+}
+
+.signing-attribution {
+  display: grid;
+  gap: 5px;
   max-width: 560px;
   margin-top: 18px;
   color: var(--muted);
+}
+
+.signing-attribution strong {
+  color: var(--text);
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 .signing-policy-card {
@@ -2133,6 +2167,25 @@ h3 {
 .signing-policy-card > p {
   margin: 0;
   color: var(--muted);
+}
+
+.signing-project-status {
+  display: grid;
+  gap: 7px;
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  padding: 14px 16px;
+  background: color-mix(in oklab, var(--accent) 9%, var(--surface-tertiary));
+}
+
+.signing-project-status strong {
+  color: var(--text);
+  font-size: 0.82rem;
+}
+
+.signing-project-status span {
+  color: var(--muted);
+  font-size: 0.84rem;
 }
 
 .signing-policy-roles {
