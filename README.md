@@ -25,4 +25,9 @@ node --test contract-tests/*.test.mjs
 Security reports and contribution guidance are in [SECURITY.md](SECURITY.md)
 and [CONTRIBUTING.md](CONTRIBUTING.md).
 
+The website homepage and download section publish the project's
+[Code signing policy](https://namlauncher.nattapat2871.me/#code-signing-policy),
+including the SignPath Foundation attribution, team roles, signing scope, and
+Privacy Notice link.
+
 Author/creator: [nattapat2871](https://nattapat2871.me)
