@@ -2120,7 +2120,7 @@ function queueHashAlignment() {
       cancelInitialHashAlignment();
       return;
     }
-    target.scrollIntoView({ behavior: "auto", block: "start" });
+    target.scrollIntoView({ behavior: "instant", block: "start" });
     if (performance.now() < hashAlignmentDeadline) {
       if (hashAlignmentTimer) window.clearTimeout(hashAlignmentTimer);
       hashAlignmentTimer = window.setTimeout(queueHashAlignment, 500);

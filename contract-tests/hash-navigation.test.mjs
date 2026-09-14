@@ -11,7 +11,7 @@ test('keeps direct hash navigation aligned while asynchronous homepage content s
   assert.ok(app.includes('function startInitialHashAlignment()'))
   assert.ok(app.includes('new ResizeObserver(queueHashAlignment)'))
   assert.ok(app.includes('performance.now() + 8000'))
-  assert.ok(app.includes('target.scrollIntoView({ behavior: "auto", block: "start" })'))
+  assert.ok(app.includes('target.scrollIntoView({ behavior: "instant", block: "start" })'))
   assert.ok(app.includes('window.addEventListener("hashchange", startInitialHashAlignment)'))
   assert.ok(app.includes('window.addEventListener("load", queueHashAlignment)'))
 })
