@@ -1,0 +1,15 @@
+NamLauncher packaged brand assets notice
+Author/creator: nattapat2871 (https://nattapat2871.me)
+Retrieved: 2026-09-13
+
+The Eclipse Adoptium icon was retrieved from the official Eclipse Adoptium website:
+https://adoptium.net/images/adoptium-icon.png
+
+Launcher icons were retrieved from favicons served by each project's official website:
+- TLauncher: https://tlauncher.org/favicon.ico
+- Modrinth: https://modrinth.com/favicon.ico
+- CurseForge: https://curseforge.overwolf.com/favicon.ico
+- Lunar Client: https://www.lunarclient.com/assets/img/favicon.ico
+- Prism Launcher: https://www.prismlauncher.org/favicon.ico
+
+The PNG launcher icons are local renderings of those favicon files for consistent browser display. Product names, logos, and trademarks belong to their respective owners. Packaging them here is for factual identification in the comparison section and does not imply endorsement or affiliation.

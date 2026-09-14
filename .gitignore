@@ -1,0 +1,9 @@
+# Author/creator: nattapat2871 (https://nattapat2871.me)
+.DS_Store
+Thumbs.db
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+*.log

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<!-- Author/creator: nattapat2871 (https://nattapat2871.me) -->
+<html lang="th" class="dark" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to Install NamLauncher on Windows, Linux, and macOS</title>
+    <meta
+      name="description"
+      content="Install NamLauncher safely on Windows, Linux, or macOS with package-specific steps and first-launch security guidance."
+    />
+    <meta name="theme-color" content="#07111d" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="NamLauncher" />
+    <meta property="og:title" content="How to Install NamLauncher" />
+    <meta
+      property="og:description"
+      content="Step-by-step NamLauncher installation for Windows, Linux packages, and macOS."
+    />
+    <meta property="og:url" content="https://namlauncher.nattapat2871.me/how-to-install" />
+    <meta property="og:image" content="https://namlauncher.nattapat2871.me/assets/namlauncher-icon.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:alt" content="NamLauncher icon" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="How to Install NamLauncher" />
+    <meta
+      name="twitter:description"
+      content="Safe installation steps for NamLauncher on Windows, Linux, and macOS."
+    />
+    <meta name="twitter:image" content="https://namlauncher.nattapat2871.me/assets/namlauncher-icon.png" />
+    <meta name="twitter:image:alt" content="NamLauncher icon" />
+    <link rel="canonical" href="https://namlauncher.nattapat2871.me/how-to-install" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
+    <link rel="apple-touch-icon" href="/assets/namlauncher-icon.png" />
+    <link rel="stylesheet" href="/assets/heroui-v3.min.css?v=3.2.3-namlauncher1" />
+    <link rel="stylesheet" href="/assets/styles.css?v=release-20260913-1.2.3-site3" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "How to Install NamLauncher",
+        "description": "Safe installation steps for NamLauncher on Windows, Linux, and macOS.",
+        "url": "https://namlauncher.nattapat2871.me/how-to-install",
+        "inLanguage": ["th", "en"],
+        "author": {
+          "@type": "Person",
+          "name": "nattapat2871",
+          "url": "https://nattapat2871.me"
+        },
+        "breadcrumb": {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "NamLauncher",
+              "item": "https://namlauncher.nattapat2871.me/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "How to Install",
+              "item": "https://namlauncher.nattapat2871.me/how-to-install"
+            }
+          ]
+        }
+      }
+    </script>
+  </head>
+  <body data-page="install">
+    <a class="skip-link" href="#install-content" data-i18n="install.skip">Skip to installation instructions</a>
+
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="NamLauncher home">
+        <img src="/assets/namlauncher-icon.png" alt="" />
+        <span>NamLauncher</span>
+        <span class="beta-pill" data-i18n="brand.beta">Stable</span>
+      </a>
+      <nav id="site-nav" class="site-nav" aria-label="Primary navigation" data-i18n-aria-label="nav.aria">
+        <a href="/" data-i18n="nav.home">Home</a>
+        <a href="/#download" data-i18n="nav.download">Download</a>
+        <a href="/how-to-install" aria-current="page" data-i18n="nav.install">Install guide</a>
+        <a href="/changelog" data-i18n="nav.changelog">Updates</a>
+        <a href="/legal" data-i18n="nav.legal">Legal</a>
+        <a href="https://nattapat2871.me" rel="me" data-i18n="nav.mainSite">Main Site</a>
+      </nav>
+      <div class="header-controls">
+        <button class="button button--ghost button--sm theme-toggle" type="button" data-theme-toggle aria-label="Switch to light mode" data-tooltip="Switch to light mode">
+          <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="3.5"></circle>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"></path>
+          </svg>
+          <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z"></path>
+          </svg>
+        </button>
+        <div class="language-switcher" role="group" aria-label="Language" data-i18n-aria-label="language.aria">
+          <button class="button button--ghost button--sm" type="button" data-lang-option="en" aria-pressed="false" data-tooltip="English">
+            <svg class="language-icon" viewBox="0 0 30 20" aria-hidden="true" focusable="false"><rect width="30" height="20" rx="2" fill="#012169"/><path d="M0 0 30 20M30 0 0 20" stroke="#fff" stroke-width="4"/><path d="M0 0 30 20M30 0 0 20" stroke="#c8102e" stroke-width="2"/><path d="M15 0v20M0 10h30" stroke="#fff" stroke-width="6"/><path d="M15 0v20M0 10h30" stroke="#c8102e" stroke-width="3.2"/></svg>
+            <span>EN</span>
+          </button>
+          <button class="button button--ghost button--sm" type="button" data-lang-option="th" aria-pressed="true" data-tooltip="ภาษาไทย">
+            <svg class="language-icon" viewBox="0 0 30 20" aria-hidden="true" focusable="false"><rect width="30" height="20" rx="2" fill="#a51931"/><path d="M0 4h30v12H0z" fill="#fff"/><path d="M0 7h30v6H0z" fill="#2d2a4a"/></svg>
+            <span>TH</span>
+          </button>
+        </div>
+        <button class="mobile-menu-toggle" type="button" data-mobile-menu-toggle aria-controls="site-nav" aria-expanded="false" aria-label="Open navigation" data-i18n-aria-label="nav.open">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </header>
+
+    <main id="install-content" class="install-page" tabindex="-1">
+      <section class="install-hero" aria-labelledby="install-title">
+        <a class="history-back" href="/">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m13 4-6 6 6 6"></path></svg>
+          <span data-i18n="history.back">Back to NamLauncher home</span>
+        </a>
+        <p class="eyebrow" data-i18n="install.eyebrow">Installation guide</p>
+        <h1 id="install-title" data-i18n="install.title">Install NamLauncher on Windows, Linux, or macOS.</h1>
+        <p data-i18n="install.intro">
+          Choose your operating system, download only from the official NamLauncher website, and follow the steps below.
+        </p>
+        <div class="install-hero-actions">
+          <a class="button button--primary button--lg primary-action" href="/#download" data-i18n="install.download">Go to official downloads</a>
+          <span class="install-safety-chip" data-i18n="install.official">Official domain: namlauncher.nattapat2871.me</span>
+        </div>
+      </section>
+
+      <nav class="platform-jump" aria-label="Choose installation instructions" data-i18n-aria-label="install.jump.aria">
+        <a href="#windows"><span class="platform-mark" aria-hidden="true">W</span><span data-i18n="install.windows.short">Windows</span></a>
+        <a href="#linux"><span class="platform-mark" aria-hidden="true">L</span><span data-i18n="install.linux.short">Linux</span></a>
+        <a href="#macos"><span class="platform-mark" aria-hidden="true">M</span><span data-i18n="install.macos.short">macOS</span></a>
+      </nav>
+
+      <section id="windows" class="install-platform" data-platform="windows" aria-labelledby="windows-title">
+        <header class="install-platform-heading">
+          <span class="platform-mark platform-mark--large" aria-hidden="true">W</span>
+          <div>
+            <p class="eyebrow" data-i18n="install.windows.eyebrow">Windows · x64 installer</p>
+            <h2 id="windows-title" data-i18n="install.windows.title">Install on Windows 10 or 11</h2>
+            <p data-i18n="install.windows.intro">Use the NamLauncher .exe installer. You do not need to turn off Windows Security.</p>
+          </div>
+        </header>
+
+        <ol class="install-steps">
+          <li>
+            <span class="install-step-number" aria-hidden="true">1</span>
+            <div>
+              <h3 data-i18n="install.windows.step1.title">Download the Windows installer</h3>
+              <p data-i18n="install.windows.step1.body">Open the official download section and select the Windows .exe package.</p>
+            </div>
+          </li>
+          <li>
+            <span class="install-step-number" aria-hidden="true">2</span>
+            <div>
+              <h3 data-i18n="install.windows.step2.title">Run the installer</h3>
+              <p data-i18n="install.windows.step2.body">Open the downloaded file, approve the standard Windows prompt, and complete Setup.</p>
+            </div>
+          </li>
+          <li>
+            <span class="install-step-number" aria-hidden="true">3</span>
+            <div>
+              <h3 data-i18n="install.windows.step3.title">Launch NamLauncher</h3>
+              <p data-i18n="install.windows.step3.body">Open NamLauncher from the Start menu. It uses the default launcher data folder automatically; you can move it later in Settings.</p>
+            </div>
+          </li>
+        </ol>
+
+        <aside class="install-note install-note--warning" aria-labelledby="windows-warning-title">
+          <span class="install-note-label" data-i18n="install.securityNotice">Security notice</span>
+          <h3 id="windows-warning-title" data-i18n="install.windows.warning.title">If Microsoft Defender SmartScreen appears</h3>
+          <p data-i18n="install.windows.warning.body">
+            An unsigned or newly published installer can show “Windows protected your PC.” First confirm the download came from the official domain. Then choose More info and Run anyway only if the file is the NamLauncher installer you expected. Keep SmartScreen enabled.
+          </p>
+          <a href="https://learn.microsoft.com/windows/apps/package-and-deploy/smartscreen-reputation" target="_blank" rel="noopener" data-i18n="install.windows.warning.link">Read Microsoft's SmartScreen guidance</a>
+        </aside>
+      </section>
+
+      <section id="linux" class="install-platform" data-platform="linux" aria-labelledby="linux-title">
+        <header class="install-platform-heading">
+          <span class="platform-mark platform-mark--large" aria-hidden="true">L</span>
+          <div>
+            <p class="eyebrow" data-i18n="install.linux.eyebrow">Linux · x64 packages</p>
+            <h2 id="linux-title" data-i18n="install.linux.title">Choose the package for your distribution</h2>
+            <p data-i18n="install.linux.intro">The download menu shows only packages that are currently published. AppImage is the simplest portable option.</p>
+          </div>
+        </header>
+
+        <div class="linux-package-grid">
+          <article class="linux-package card card--secondary">
+            <span class="package-format">AppImage</span>
+            <h3 data-i18n="install.linux.appimage.title">Portable · recommended</h3>
+            <p data-i18n="install.linux.appimage.body">Make the downloaded file executable, then run it directly.</p>
+            <pre tabindex="0" aria-label="AppImage installation commands" data-i18n-aria-label="install.linux.appimage.commandAria"><code>chmod +x ~/Downloads/NamLauncher-*.AppImage
+~/Downloads/NamLauncher-*.AppImage</code></pre>
+          </article>
+
+          <article class="linux-package card card--secondary">
+            <span class="package-format">.deb</span>
+            <h3 data-i18n="install.linux.deb.title">Debian or Ubuntu</h3>
+            <p data-i18n="install.linux.deb.body">Install the local package with APT so required system dependencies can be resolved.</p>
+            <pre tabindex="0" aria-label="Debian and Ubuntu installation command" data-i18n-aria-label="install.linux.deb.commandAria"><code>cd ~/Downloads &amp;&amp; sudo apt install ./NamLauncher-*.deb</code></pre>
+          </article>
+
+          <article class="linux-package card card--secondary">
+            <span class="package-format">.rpm</span>
+            <h3 data-i18n="install.linux.rpm.title">Fedora or RHEL</h3>
+            <p data-i18n="install.linux.rpm.body">Use DNF to install the downloaded RPM and its required dependencies.</p>
+            <pre tabindex="0" aria-label="Fedora and RHEL installation command" data-i18n-aria-label="install.linux.rpm.commandAria"><code>cd ~/Downloads &amp;&amp; sudo dnf install ./NamLauncher-*.rpm</code></pre>
+          </article>
+
+          <article class="linux-package card card--secondary">
+            <span class="package-format">.flatpak</span>
+            <h3 data-i18n="install.linux.flatpak.title">Flatpak bundle</h3>
+            <p data-i18n="install.linux.flatpak.body">Install the local bundle for your user, then open NamLauncher from the application menu.</p>
+            <pre tabindex="0" aria-label="Flatpak installation command" data-i18n-aria-label="install.linux.flatpak.commandAria"><code>cd ~/Downloads &amp;&amp; flatpak install --user ./NamLauncher-*.flatpak</code></pre>
+          </article>
+
+          <article class="linux-package card card--secondary">
+            <span class="package-format">.pkg.tar.zst</span>
+            <h3 data-i18n="install.linux.arch.title">Arch or Manjaro</h3>
+            <p data-i18n="install.linux.arch.body">Install the downloaded package with pacman.</p>
+            <pre tabindex="0" aria-label="Arch and Manjaro installation command" data-i18n-aria-label="install.linux.arch.commandAria"><code>cd ~/Downloads &amp;&amp; sudo pacman -U ./NamLauncher-*.pkg.tar.zst</code></pre>
+          </article>
+        </div>
+
+        <aside class="install-note" aria-labelledby="linux-note-title">
+          <span class="install-note-label" data-i18n="install.tip">Tip</span>
+          <h3 id="linux-note-title" data-i18n="install.linux.note.title">Commands assume the file is in Downloads</h3>
+          <p data-i18n="install.linux.note.body">If your browser saved it elsewhere, open a terminal in that folder or replace ~/Downloads with the correct path.</p>
+        </aside>
+      </section>
+
+      <section id="macos" class="install-platform" data-platform="macos" aria-labelledby="macos-title">
+        <header class="install-platform-heading">
+          <span class="platform-mark platform-mark--large" aria-hidden="true">M</span>
+          <div>
+            <p class="eyebrow" data-i18n="install.macos.eyebrow">macOS · universal DMG</p>
+            <h2 id="macos-title" data-i18n="install.macos.title">Install the direct-download macOS build</h2>
+            <p data-i18n="install.macos.intro">The free macOS build is distributed from this website without Apple notarization, so macOS will ask you to confirm the first launch.</p>
+          </div>
+        </header>
+
+        <ol class="install-steps">
+          <li>
+            <span class="install-step-number" aria-hidden="true">1</span>
+            <div>
+              <h3 data-i18n="install.macos.step1.title">Download the universal DMG</h3>
+              <p data-i18n="install.macos.step1.body">Select the macOS package in the official download menu. It supports Apple silicon and Intel Macs.</p>
+            </div>
+          </li>
+          <li>
+            <span class="install-step-number" aria-hidden="true">2</span>
+            <div>
+              <h3 data-i18n="install.macos.step2.title">Move NamLauncher to Applications</h3>
+              <p data-i18n="install.macos.step2.body">Open the DMG and drag NamLauncher into the Applications folder, then eject the disk image.</p>
+            </div>
+          </li>
+          <li>
+            <span class="install-step-number" aria-hidden="true">3</span>
+            <div>
+              <h3 data-i18n="install.macos.step3.title">Try to open the app once</h3>
+              <p data-i18n="install.macos.step3.body">In Applications, Control-click NamLauncher and choose Open. If macOS still blocks it, close the warning and continue to the next step.</p>
+            </div>
+          </li>
+          <li>
+            <span class="install-step-number" aria-hidden="true">4</span>
+            <div>
+              <h3 data-i18n="install.macos.step4.title">Allow only this app</h3>
+              <p data-i18n="install.macos.step4.body">Open System Settings, choose Privacy &amp; Security, scroll to Security, and click Open Anyway for NamLauncher. Confirm Open when macOS asks again.</p>
+            </div>
+          </li>
+        </ol>
+
+        <aside class="install-note install-note--warning" aria-labelledby="macos-warning-title">
+          <span class="install-note-label" data-i18n="install.securityNotice">Security notice</span>
+          <h3 id="macos-warning-title" data-i18n="install.macos.warning.title">Do not disable Gatekeeper</h3>
+          <p data-i18n="install.macos.warning.body">Use Open Anyway only for the NamLauncher copy downloaded from the official domain. This creates an exception for this app; do not run commands that disable macOS security for the whole system.</p>
+          <a href="https://support.apple.com/102445" target="_blank" rel="noopener" data-i18n="install.macos.warning.link">Read Apple's app safety guidance</a>
+          <div class="macos-integrity" data-macos-integrity hidden>
+            <h4 data-i18n="install.macos.integrity.title">Verify the DMG before first launch</h4>
+            <p data-i18n="install.macos.integrity.body">Download the matching SHA-256 file, keep it beside the DMG in Downloads, then run this command in Terminal. Continue only when it reports OK.</p>
+            <a data-macos-checksum-link download data-i18n="install.macos.integrity.link">Download the matching SHA-256 checksum</a>
+            <pre tabindex="0" aria-label="Command to verify the macOS DMG checksum" data-i18n-aria-label="install.macos.integrity.commandAria"><code>cd ~/Downloads &amp;&amp; shasum -a 256 -c NamLauncher-*-macOS-universal.dmg.sha256</code></pre>
+          </div>
+        </aside>
+      </section>
+
+      <section class="install-help" aria-labelledby="install-help-title">
+        <div>
+          <p class="eyebrow" data-i18n="install.help.eyebrow">Before you continue</p>
+          <h2 id="install-help-title" data-i18n="install.help.title">Download the package first, then keep this guide open.</h2>
+          <p data-i18n="install.help.body">If a package is marked unavailable, it has not been published yet. Choose another available format or return after the next release.</p>
+        </div>
+        <a class="button button--primary button--lg primary-action" href="/#download" data-i18n="install.download">Go to official downloads</a>
+      </section>
+    </main>
+
+    <button class="back-to-top" type="button" data-back-to-top aria-label="Back to top" data-i18n-aria-label="backToTop.label" data-i18n-tooltip="backToTop.label" data-tooltip="Back to top" aria-hidden="true" tabindex="-1">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 14 6-6 6 6"></path></svg>
+    </button>
+
+    <footer class="site-footer">
+      <div class="footer-identity">
+        <span data-i18n="footer.product">NamLauncher Stable</span>
+        <p class="footer-copyright" data-footer-copyright>
+          Copyright © <span data-current-year>2026</span>
+          <a class="footer-owner" href="https://nattapat2871.me" rel="me">Nattapat2871</a>. All rights reserved.
+        </p>
+      </div>
+      <span class="footer-links" data-i18n-html="footer.links">
+        Main site: <a href="https://nattapat2871.me" rel="me">nattapat2871.me</a> /
+        <a href="/how-to-install">Installation guide</a> /
+        <a href="/legal">Terms &amp; Privacy</a>
+      </span>
+    </footer>
+
+  <script src="/assets/app.js?v=release-20260913-1.2.3-site3" defer></script>
+  </body>
+</html>

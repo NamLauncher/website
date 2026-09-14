@@ -1,0 +1,12 @@
+NamLauncher website icon notice
+
+Author/creator of NamLauncher integration:
+nattapat2871 (https://nattapat2871.me)
+
+Selected interface icons use paths from Font Awesome Free.
+Font Awesome Free is provided by Fonticons, Inc.
+Icons: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+Project and license details: https://fontawesome.com/license/free
+
+The Discord mark is a trademark of Discord Inc. Its use identifies the
+corresponding integration and does not imply endorsement.
