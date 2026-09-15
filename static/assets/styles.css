@@ -872,8 +872,8 @@ h3 {
 
 .hero-metrics {
   display: grid;
-  width: min(720px, 100%);
-  grid-template-columns: repeat(3, 1fr);
+  width: min(820px, 100%);
+  grid-template-columns: repeat(4, 1fr);
   margin-top: 48px;
   overflow: hidden;
   border: 1px solid var(--line-strong);
@@ -901,6 +901,54 @@ h3 {
 
 .hero-metrics div:last-child {
   border-right: 0;
+}
+
+.hero-metric-source {
+  padding: 0 !important;
+}
+
+.hero-metric-link {
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 20px 14px;
+  color: var(--text);
+  text-decoration: none;
+  transition: background-color 180ms ease, color 180ms ease;
+}
+
+.hero-metric-link:hover,
+.hero-metric-link:focus-visible {
+  background: var(--brand-soft);
+  color: var(--accent);
+}
+
+.hero-metric-icon {
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+  color: currentColor;
+}
+
+.hero-metric-icon svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+.hero-metric-link strong {
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  font-weight: 850;
+  letter-spacing: -0.025em;
+}
+
+.hero-metric-link small {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 650;
 }
 
 .hero-metrics span {
