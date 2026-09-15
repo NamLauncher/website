@@ -4,6 +4,7 @@ const DEVELOPER_USER_ID = "1007237437627572275";
 const DEVELOPER_WS_URL = `wss://ame-api.nattapat2871.me/ws/v1/user/${DEVELOPER_USER_ID}`;
 const VIEW_COOLDOWN_MS = 24 * 60 * 60 * 1000;
 const LEGAL_DOCUMENT_URL = "/legal.json";
+const SITE_CONTENT_URL = "/api/site-content";
 const CHANGELOG_URL = "/api/changelog";
 const OFFICIAL_CHANGELOG_COMMIT_PREFIX = "https://github.com/Nattapat2871/NamLauncher/commit/";
 const fallbackSite = "namlauncher.nattapat2871.me";
@@ -13,12 +14,15 @@ const pageStatsSite = ["localhost", "127.0.0.1", ""].includes(currentHost) ? fal
 let latestDownloadUrl = "/download/";
 let latestRelease = null;
 let legalDocument = null;
+let siteContentPolicy = null;
 let changelogEntries = [];
 let activeStatusKey = "";
 let activeStatusIsError = false;
 let currentDeveloperProfile = null;
 let developerActivityConnection = null;
 let motionObserver = null;
+let headerExpansionObserver = null;
+let ambientMotionObserver = null;
 let layoutMotionFrame = 0;
 let layoutMotionTimer = null;
 let resizeMotionTimer = null;
@@ -59,10 +63,12 @@ const translations = {
     "nav.mainSite": "Main Site",
     "hero.eyebrow": "Windows 1.2.3 stable · Linux 1.2.3 stable · macOS 1.2.3 stable",
     "hero.text": "Keep every Minecraft setup separate. Pick a version, choose a loader, add mods, and play without moving folders by hand.",
+    "hero.signingNote": "NamLauncher is currently applying to the SignPath Foundation for free code signing. The current public release remains unsigned.",
     "actions.download": "Download Windows stable",
     "actions.showDownloads": "All downloads",
     "actions.downloadMenuTooltip": "Choose a platform and package",
     "actions.loadingDownloads": "Loading downloads...",
+    "actions.noDownloads": "No downloads are available right now.",
     "actions.chooseDownload": "Choose a download",
     "actions.downloadWindows": "Download for Windows",
     "actions.downloadLinux": "Download AppImage for Linux",
@@ -150,6 +156,8 @@ const translations = {
     "comparison.lunar.body": "Lunar focuses on an all-in-one client, built-in performance and PvP mods, plus custom Fabric mods on supported versions. NamLauncher focuses on ordinary Vanilla, Fabric, Forge, NeoForge, and Quilt instances where you choose the content.",
     "comparison.prism.title": "The closest match for instances and two providers",
     "comparison.prism.body": "Prism already manages instances and installs from both Modrinth and CurseForge. NamLauncher's added focus is Thai-first guidance, managed in-game identity, Discord linking, guided troubleshooting, and a launcher update flow designed for its community.",
+    "comparison.atlauncher.title": "A broad modpack launcher with several catalogs",
+    "comparison.atlauncher.body": "ATLauncher provides its own modpacks and can browse packs from CurseForge, Modrinth, and Technic. NamLauncher differs through Thai-first guidance, managed Java, in-game identity, Discord linking, and support tools built around its community.",
     "comparison.note": "Checked against official public pages on 12 September 2026. Features may change. Product names, screenshots, and trademarks belong to their respective owners; no endorsement is implied.",
     "changelog.eyebrow": "All updates",
     "changelog.title": "See what changed in every NamLauncher version.",
@@ -239,6 +247,8 @@ const translations = {
     "partner.eyebrow": "Partner server",
     "partner.ownedEyebrow": "NamLauncher server",
     "partner.aria": "NamLauncher server partners",
+    "partner.sectionEyebrow": "Server partners",
+    "partner.sectionTitle": "Communities you can join from NamLauncher.",
     "partner.address": "Server address",
     "partner.minisand.title": "MiniSand Online",
     "partner.minisand.body": "A NamLauncher partner server with its address ready in the launcher.",
@@ -251,7 +261,7 @@ const translations = {
     "partner.teddyblock.linkLabel": "Visit the TeddyBlock website (opens in a new tab)",
     "partner.open": "Visit server",
     "developer.activity.eyebrow": "Live activity",
-    "developer.activity.title": "What Nattapat2871 is doing now",
+    "developer.activity.title": "Current project activity",
     "developer.activity.source": "AME API",
     "developer.activity.empty": "No public activity is being shared right now.",
     "developer.activity.unavailable": "Live activity is temporarily unavailable.",
@@ -294,10 +304,11 @@ const translations = {
     "signing.status": "Application pending review",
     "signing.attributionLead": "Planned provider after approval",
     "signing.attribution": "Free code signing provided by SignPath.io, certificate by SignPath Foundation.",
-    "signing.scope": "NamLauncher has applied to use SignPath Foundation for code signing. The current public installer remains unsigned. If approved, future official Windows releases will be signed through SignPath.io with a certificate issued by SignPath Foundation.",
+    "signing.scope": "NamLauncher is currently applying to the SignPath Foundation for free code signing. The current public release remains unsigned. If approved, future official Windows releases will be signed through SignPath.io with a certificate issued by the SignPath Foundation.",
     "signing.openSource": "Open-source project status",
     "signing.openSourceBody": "Development began privately in June 2026. The launcher source and its build workflow are now public under GPL-3.0 in the official NamLauncher GitHub organization.",
-    "signing.rolesAria": "Code signing team roles",
+    "signing.rolesAria": "Project maintainer",
+    "signing.maintainer": "Author, reviewer, and approver",
     "signing.authors": "Authors and committers",
     "signing.reviewers": "Reviewers",
     "signing.approvers": "Approvers",
@@ -316,6 +327,15 @@ const translations = {
     "viewBadge.title": "Page views",
     "backToTop.label": "Back to top",
     "footer.product": "NamLauncher Stable",
+    "footer.description": "A community-focused Minecraft Java launcher with separate instances, managed runtimes, skins, mods, and guided support.",
+    "footer.made": "Made with 💙 by",
+    "footer.socialsAria": "NamLauncher social links",
+    "footer.productHeading": "Product",
+    "footer.communityHeading": "Community",
+    "footer.helpHeading": "Help & information",
+    "footer.reportIssue": "Report an issue",
+    "footer.disclaimer": "NamLauncher is not an official Minecraft service and is not affiliated with Mojang or Microsoft.",
+    "footer.joinDiscord": "Join our Discord",
     "footer.links": "Main site: nattapat2871.me / Installation guide / Discord community / Terms & Privacy",
     "footer.mainOnly": "Main site: nattapat2871.me",
     "footer.mainSite": "Main site",
@@ -401,10 +421,12 @@ const translations = {
     "nav.mainSite": "เว็บหลัก",
     "hero.eyebrow": "Windows 1.2.3 stable · Linux 1.2.3 stable · macOS 1.2.3 stable",
     "hero.text": "แยก Minecraft แต่ละชุดให้เป็นสัดส่วน เลือกเวอร์ชัน เลือกตัวโหลด ลงม็อด แล้วกดเล่นได้เลย ไม่ต้องคอยย้ายไฟล์เอง",
+    "hero.signingNote": "NamLauncher กำลังยื่นสมัครโครงการ SignPath Foundation เพื่อขอใช้บริการลงลายเซ็นโค้ดโดยไม่มีค่าใช้จ่าย รุ่นสาธารณะปัจจุบันยังไม่ได้ลงลายเซ็น",
     "actions.download": "ดาวน์โหลด Windows รุ่นเสถียร",
     "actions.showDownloads": "แพลตฟอร์มทั้งหมด",
     "actions.downloadMenuTooltip": "เลือกแพลตฟอร์มและรูปแบบไฟล์",
     "actions.loadingDownloads": "กำลังโหลดตัวเลือกดาวน์โหลด...",
+    "actions.noDownloads": "ขณะนี้ไม่มีไฟล์ดาวน์โหลด",
     "actions.chooseDownload": "เลือกไฟล์ดาวน์โหลด",
     "actions.downloadWindows": "ดาวน์โหลดสำหรับ Windows",
     "actions.downloadLinux": "ดาวน์โหลด AppImage สำหรับ Linux",
@@ -492,6 +514,8 @@ const translations = {
     "comparison.lunar.body": "Lunar เน้นไคลเอนต์ชุดเดียว มีม็อดเพิ่มประสิทธิภาพและ PvP ในตัว พร้อมม็อด Fabric เพิ่มเองบนเวอร์ชันที่รองรับ ส่วน NamLauncher เน้นอินสแตนซ์ Vanilla, Fabric, Forge, NeoForge และ Quilt ที่ผู้เล่นเลือกคอนเทนต์เอง",
     "comparison.prism.title": "ใกล้เคียงที่สุดด้านอินสแตนซ์และสองแหล่งม็อด",
     "comparison.prism.body": "Prism จัดการหลายอินสแตนซ์และติดตั้งจาก Modrinth กับ CurseForge ได้อยู่แล้ว จุดที่ NamLauncher เพิ่มเข้ามาคือคำแนะนำภาษาไทย ตัวตน NamLauncher ในเกม การเชื่อม Discord แนวทางแก้ปัญหาที่อ่านง่าย และขั้นตอนอัปเดตที่ทำมาเพื่อชุมชนของลันเชอร์",
+    "comparison.atlauncher.title": "ลันเชอร์ม็อดแพ็กที่รองรับหลายแค็ตตาล็อก",
+    "comparison.atlauncher.body": "ATLauncher มีม็อดแพ็กของตนเองและค้นหาแพ็กจาก CurseForge, Modrinth และ Technic ได้ ส่วน NamLauncher แตกต่างด้วยคำแนะนำภาษาไทย การจัดการ Java ตัวตนในเกม การเชื่อม Discord และเครื่องมือช่วยเหลือที่สร้างรอบชุมชน",
     "comparison.note": "ตรวจสอบจากหน้าเว็บทางการเมื่อ 12 กันยายน 2026 ฟีเจอร์อาจเปลี่ยนแปลงได้ ชื่อสินค้า ภาพหน้าจอ และเครื่องหมายการค้าเป็นของเจ้าของแต่ละราย การแสดงข้อมูลนี้ไม่ได้หมายถึงการรับรอง NamLauncher",
     "changelog.eyebrow": "การอัปเดตทั้งหมด",
     "changelog.title": "ดูว่า NamLauncher เปลี่ยนแปลงอะไรในแต่ละเวอร์ชัน",
@@ -581,6 +605,8 @@ const translations = {
     "partner.eyebrow": "เซิร์ฟเวอร์พาร์ทเนอร์",
     "partner.ownedEyebrow": "เซิร์ฟเวอร์ของ NamLauncher",
     "partner.aria": "รายชื่อเซิร์ฟเวอร์พาร์ทเนอร์ของ NamLauncher",
+    "partner.sectionEyebrow": "เซิร์ฟเวอร์พาร์ทเนอร์",
+    "partner.sectionTitle": "ชุมชนที่เข้าเล่นได้จาก NamLauncher",
     "partner.address": "ที่อยู่เซิร์ฟเวอร์",
     "partner.minisand.title": "MiniSand Online",
     "partner.minisand.body": "เซิร์ฟเวอร์พาร์ทเนอร์ที่มีที่อยู่เตรียมไว้ให้ใน NamLauncher",
@@ -593,7 +619,7 @@ const translations = {
     "partner.teddyblock.linkLabel": "ไปยังเว็บไซต์ TeddyBlock (เปิดในแท็บใหม่)",
     "partner.open": "เข้าเว็บเซิร์ฟเวอร์",
     "developer.activity.eyebrow": "กิจกรรมสด",
-    "developer.activity.title": "ตอนนี้ Nattapat2871 กำลังทำอะไร",
+    "developer.activity.title": "กิจกรรมของโครงการในขณะนี้",
     "developer.activity.source": "ข้อมูลสดจาก AME API",
     "developer.activity.empty": "ขณะนี้ยังไม่มีกิจกรรมสาธารณะที่กำลังแชร์",
     "developer.activity.unavailable": "กิจกรรมสดไม่พร้อมใช้งานชั่วคราว",
@@ -636,10 +662,11 @@ const translations = {
     "signing.status": "ยื่นใบสมัครแล้วและอยู่ระหว่างตรวจสอบ",
     "signing.attributionLead": "ผู้ให้บริการที่วางแผนใช้หลังได้รับอนุมัติ",
     "signing.attribution": "Free code signing provided by SignPath.io, certificate by SignPath Foundation.",
-    "signing.scope": "NamLauncher ได้ยื่นสมัครขอใช้ SignPath Foundation สำหรับการลงลายเซ็นโค้ดแล้ว ตัวติดตั้งสาธารณะในปัจจุบันยังไม่มีลายเซ็น หากได้รับอนุมัติ ไฟล์ Windows รุ่นทางการในอนาคตจะลงลายเซ็นผ่าน SignPath.io ด้วยใบรับรองที่ออกโดย SignPath Foundation",
+    "signing.scope": "NamLauncher กำลังยื่นสมัครโครงการ SignPath Foundation เพื่อขอใช้บริการลงลายเซ็นโค้ดโดยไม่มีค่าใช้จ่าย รุ่นสาธารณะปัจจุบันยังไม่ได้ลงลายเซ็น หากได้รับอนุมัติ รุ่น Windows ทางการในอนาคตจะลงลายเซ็นผ่าน SignPath.io ด้วยใบรับรองที่ออกโดย SignPath Foundation",
     "signing.openSource": "สถานะโครงการ Open Source",
     "signing.openSourceBody": "โครงการเริ่มพัฒนาแบบ private ตั้งแต่มิถุนายน 2026 ปัจจุบันซอร์สลันเชอร์และขั้นตอน build เผยแพร่ต่อสาธารณะภายใต้ GPL-3.0 ในองค์กร NamLauncher บน GitHub แล้ว",
-    "signing.rolesAria": "บทบาททีมลงลายเซ็นโค้ด",
+    "signing.rolesAria": "ผู้ดูแลโครงการ",
+    "signing.maintainer": "ผู้เขียน ผู้ตรวจทาน และผู้อนุมัติ",
     "signing.authors": "ผู้เขียนและผู้ commit",
     "signing.reviewers": "ผู้ตรวจทาน",
     "signing.approvers": "ผู้อนุมัติ",
@@ -658,6 +685,15 @@ const translations = {
     "viewBadge.title": "ยอดเข้าชมหน้าเว็บ",
     "backToTop.label": "กลับขึ้นด้านบน",
     "footer.product": "NamLauncher Stable",
+    "footer.description": "ลันเชอร์ Minecraft Java ที่สร้างเพื่อชุมชน พร้อมอินสแตนซ์แยก Java ที่จัดการให้ สกิน ม็อด และคำแนะนำการใช้งาน",
+    "footer.made": "สร้างด้วย 💙 โดย",
+    "footer.socialsAria": "ลิงก์โซเชียลของ NamLauncher",
+    "footer.productHeading": "ผลิตภัณฑ์",
+    "footer.communityHeading": "ชุมชน",
+    "footer.helpHeading": "ข้อมูลและความช่วยเหลือ",
+    "footer.reportIssue": "แจ้งปัญหา",
+    "footer.disclaimer": "NamLauncher ไม่ใช่บริการ Minecraft อย่างเป็นทางการ และไม่มีส่วนเกี่ยวข้องกับ Mojang หรือ Microsoft",
+    "footer.joinDiscord": "เข้าร่วม Discord",
     "footer.links": "เว็บหลัก: nattapat2871.me / คู่มือติดตั้ง / ชุมชน Discord / ข้อกำหนดและความเป็นส่วนตัว",
     "footer.mainOnly": "เว็บหลัก: nattapat2871.me",
     "footer.mainSite": "เว็บหลัก",
@@ -866,9 +902,141 @@ translations.th["legal.privacy.developer.title"] = "5. \u0e42\u0e1b\u0e23\u0e44\
 translations.th["legal.privacy.developer.body"] = "\u0e2b\u0e19\u0e49\u0e32\u0e41\u0e23\u0e01\u0e02\u0e2d\u0e07\u0e40\u0e27\u0e47\u0e1a\u0e44\u0e0b\u0e15\u0e4c\u0e2d\u0e32\u0e08\u0e2d\u0e48\u0e32\u0e19\u0e02\u0e49\u0e2d\u0e21\u0e39\u0e25\u0e42\u0e1b\u0e23\u0e44\u0e1f\u0e25\u0e4c\u0e41\u0e25\u0e30\u0e01\u0e34\u0e08\u0e01\u0e23\u0e23\u0e21\u0e2a\u0e32\u0e18\u0e32\u0e23\u0e13\u0e30\u0e02\u0e2d\u0e07\u0e1c\u0e39\u0e49\u0e1e\u0e31\u0e12\u0e19\u0e32\u0e08\u0e32\u0e01 <a href=\"https://ame-api.nattapat2871.me/\" rel=\"noopener\" target=\"_blank\">AME API</a> \u0e40\u0e1e\u0e37\u0e48\u0e2d\u0e41\u0e2a\u0e14\u0e07\u0e27\u0e34\u0e14\u0e40\u0e08\u0e47\u0e15\u0e2a\u0e16\u0e32\u0e19\u0e30\u0e41\u0e1a\u0e1a\u0e2a\u0e14";
 translations.th["legal.privacy.contact.title"] = "6. \u0e15\u0e34\u0e14\u0e15\u0e48\u0e2d";
 
+Object.assign(translations.en, {
+  "meta.discord.title": "NamLauncher Discord Community",
+  "meta.discord.description": "Join the official NamLauncher Discord for announcements, support, bug reports, suggestions, and community discussion.",
+  "discord.eyebrow": "Official community",
+  "discord.title": "Build, play, and get help together.",
+  "discord.intro": "Join the NamLauncher Discord for release announcements, installation help, bug reports, feature suggestions, and conversations with other Minecraft players and developers.",
+  "discord.join": "Join NamLauncher Discord",
+  "discord.safety": "The invite always resolves through the official NamLauncher website.",
+  "discord.announcements.title": "Release announcements",
+  "discord.announcements.body": "See new stable releases, maintenance notices, and important launcher updates in one place.",
+  "discord.support.title": "Help and bug reports",
+  "discord.support.body": "Ask for installation help, share useful error details, and follow progress on confirmed problems.",
+  "discord.suggestions.title": "Community suggestions",
+  "discord.suggestions.body": "Post launcher, website, server, or community ideas in organized forum channels.",
+  "discord.developers.title": "Minecraft and web development",
+  "discord.developers.body": "Talk about mods, servers, Java, websites, and the open-source NamLauncher project.",
+  "discord.ready.title": "Ready to join?",
+  "discord.ready.body": "Discord will open only after you press the button. You can return to this page at any time."
+});
+
+Object.assign(translations.th, {
+  "meta.discord.title": "\u0e0a\u0e38\u0e21\u0e0a\u0e19 Discord \u0e02\u0e2d\u0e07 NamLauncher",
+  "meta.discord.description": "\u0e40\u0e02\u0e49\u0e32\u0e23\u0e48\u0e27\u0e21 Discord \u0e17\u0e32\u0e07\u0e01\u0e32\u0e23\u0e02\u0e2d\u0e07 NamLauncher \u0e40\u0e1e\u0e37\u0e48\u0e2d\u0e15\u0e34\u0e14\u0e15\u0e32\u0e21\u0e1b\u0e23\u0e30\u0e01\u0e32\u0e28 \u0e02\u0e2d\u0e04\u0e27\u0e32\u0e21\u0e0a\u0e48\u0e27\u0e22\u0e40\u0e2b\u0e25\u0e37\u0e2d \u0e41\u0e08\u0e49\u0e07\u0e1a\u0e31\u0e4a\u0e01 \u0e40\u0e2a\u0e19\u0e2d\u0e41\u0e19\u0e30 \u0e41\u0e25\u0e30\u0e1e\u0e39\u0e14\u0e04\u0e38\u0e22\u0e01\u0e31\u0e1a\u0e0a\u0e38\u0e21\u0e0a\u0e19",
+  "discord.eyebrow": "\u0e0a\u0e38\u0e21\u0e0a\u0e19\u0e17\u0e32\u0e07\u0e01\u0e32\u0e23",
+  "discord.title": "\u0e2a\u0e23\u0e49\u0e32\u0e07 \u0e40\u0e25\u0e48\u0e19 \u0e41\u0e25\u0e30\u0e0a\u0e48\u0e27\u0e22\u0e01\u0e31\u0e19\u0e1e\u0e31\u0e12\u0e19\u0e32\u0e44\u0e1b\u0e14\u0e49\u0e27\u0e22\u0e01\u0e31\u0e19",
+  "discord.intro": "\u0e40\u0e02\u0e49\u0e32\u0e23\u0e48\u0e27\u0e21 Discord \u0e02\u0e2d\u0e07 NamLauncher \u0e40\u0e1e\u0e37\u0e48\u0e2d\u0e15\u0e34\u0e14\u0e15\u0e32\u0e21\u0e1b\u0e23\u0e30\u0e01\u0e32\u0e28\u0e2d\u0e31\u0e1b\u0e40\u0e14\u0e15 \u0e02\u0e2d\u0e04\u0e27\u0e32\u0e21\u0e0a\u0e48\u0e27\u0e22\u0e40\u0e2b\u0e25\u0e37\u0e2d\u0e43\u0e19\u0e01\u0e32\u0e23\u0e15\u0e34\u0e14\u0e15\u0e31\u0e49\u0e07 \u0e41\u0e08\u0e49\u0e07\u0e1a\u0e31\u0e4a\u0e01 \u0e40\u0e2a\u0e19\u0e2d\u0e1f\u0e35\u0e40\u0e08\u0e2d\u0e23\u0e4c \u0e41\u0e25\u0e30\u0e1e\u0e39\u0e14\u0e04\u0e38\u0e22\u0e01\u0e31\u0e1a\u0e1c\u0e39\u0e49\u0e40\u0e25\u0e48\u0e19 Minecraft \u0e01\u0e31\u0e1a\u0e19\u0e31\u0e01\u0e1e\u0e31\u0e12\u0e19\u0e32\u0e04\u0e19\u0e2d\u0e37\u0e48\u0e19 \u0e46",
+  "discord.join": "\u0e40\u0e02\u0e49\u0e32\u0e23\u0e48\u0e27\u0e21 Discord \u0e02\u0e2d\u0e07 NamLauncher",
+  "discord.safety": "\u0e25\u0e34\u0e07\u0e01\u0e4c\u0e40\u0e0a\u0e34\u0e0d\u0e08\u0e30\u0e1c\u0e48\u0e32\u0e19\u0e40\u0e27\u0e47\u0e1a\u0e44\u0e0b\u0e15\u0e4c\u0e17\u0e32\u0e07\u0e01\u0e32\u0e23\u0e02\u0e2d\u0e07 NamLauncher \u0e40\u0e2a\u0e21\u0e2d",
+  "discord.announcements.title": "\u0e1b\u0e23\u0e30\u0e01\u0e32\u0e28\u0e2d\u0e31\u0e1b\u0e40\u0e14\u0e15",
+  "discord.announcements.body": "\u0e15\u0e34\u0e14\u0e15\u0e32\u0e21\u0e40\u0e27\u0e2d\u0e23\u0e4c\u0e0a\u0e31\u0e19 Stable \u0e43\u0e2b\u0e21\u0e48 \u0e1b\u0e23\u0e30\u0e01\u0e32\u0e28\u0e1b\u0e34\u0e14\u0e1b\u0e23\u0e31\u0e1a\u0e1b\u0e23\u0e38\u0e07 \u0e41\u0e25\u0e30\u0e02\u0e48\u0e32\u0e27\u0e2a\u0e33\u0e04\u0e31\u0e0d\u0e02\u0e2d\u0e07\u0e25\u0e31\u0e19\u0e40\u0e0a\u0e2d\u0e23\u0e4c\u0e43\u0e19\u0e17\u0e35\u0e48\u0e40\u0e14\u0e35\u0e22\u0e27",
+  "discord.support.title": "\u0e0a\u0e48\u0e27\u0e22\u0e40\u0e2b\u0e25\u0e37\u0e2d\u0e41\u0e25\u0e30\u0e41\u0e08\u0e49\u0e07\u0e1a\u0e31\u0e4a\u0e01",
+  "discord.support.body": "\u0e02\u0e2d\u0e04\u0e27\u0e32\u0e21\u0e0a\u0e48\u0e27\u0e22\u0e40\u0e2b\u0e25\u0e37\u0e2d\u0e40\u0e23\u0e37\u0e48\u0e2d\u0e07\u0e15\u0e34\u0e14\u0e15\u0e31\u0e49\u0e07 \u0e2a\u0e48\u0e07\u0e23\u0e32\u0e22\u0e25\u0e30\u0e40\u0e2d\u0e35\u0e22\u0e14 error \u0e17\u0e35\u0e48\u0e08\u0e33\u0e40\u0e1b\u0e47\u0e19 \u0e41\u0e25\u0e30\u0e15\u0e34\u0e14\u0e15\u0e32\u0e21\u0e1b\u0e31\u0e0d\u0e2b\u0e32\u0e17\u0e35\u0e48\u0e15\u0e23\u0e27\u0e08\u0e2a\u0e2d\u0e1a\u0e41\u0e25\u0e49\u0e27",
+  "discord.suggestions.title": "\u0e02\u0e49\u0e2d\u0e40\u0e2a\u0e19\u0e2d\u0e41\u0e19\u0e30\u0e08\u0e32\u0e01\u0e0a\u0e38\u0e21\u0e0a\u0e19",
+  "discord.suggestions.body": "\u0e40\u0e2a\u0e19\u0e2d\u0e41\u0e19\u0e27\u0e04\u0e34\u0e14\u0e2a\u0e33\u0e2b\u0e23\u0e31\u0e1a\u0e25\u0e31\u0e19\u0e40\u0e0a\u0e2d\u0e23\u0e4c \u0e40\u0e27\u0e47\u0e1a\u0e44\u0e0b\u0e15\u0e4c \u0e40\u0e0b\u0e34\u0e23\u0e4c\u0e1f\u0e40\u0e27\u0e2d\u0e23\u0e4c \u0e2b\u0e23\u0e37\u0e2d\u0e0a\u0e38\u0e21\u0e0a\u0e19\u0e1c\u0e48\u0e32\u0e19\u0e2b\u0e49\u0e2d\u0e07\u0e1f\u0e2d\u0e23\u0e31\u0e21\u0e17\u0e35\u0e48\u0e08\u0e31\u0e14\u0e2b\u0e21\u0e27\u0e14\u0e44\u0e27\u0e49",
+  "discord.developers.title": "Minecraft \u0e41\u0e25\u0e30 Web Development",
+  "discord.developers.body": "\u0e1e\u0e39\u0e14\u0e04\u0e38\u0e22\u0e40\u0e23\u0e37\u0e48\u0e2d\u0e07\u0e21\u0e2d\u0e14 \u0e40\u0e0b\u0e34\u0e23\u0e4c\u0e1f\u0e40\u0e27\u0e2d\u0e23\u0e4c Java \u0e40\u0e27\u0e47\u0e1a\u0e44\u0e0b\u0e15\u0e4c \u0e41\u0e25\u0e30\u0e42\u0e04\u0e23\u0e07\u0e01\u0e32\u0e23 NamLauncher \u0e41\u0e1a\u0e1a\u0e42\u0e2d\u0e40\u0e1e\u0e19\u0e0b\u0e2d\u0e23\u0e4c\u0e2a",
+  "discord.ready.title": "\u0e1e\u0e23\u0e49\u0e2d\u0e21\u0e40\u0e02\u0e49\u0e32\u0e23\u0e48\u0e27\u0e21\u0e41\u0e25\u0e49\u0e27\u0e2b\u0e23\u0e37\u0e2d\u0e22\u0e31\u0e07",
+  "discord.ready.body": "Discord \u0e08\u0e30\u0e40\u0e1b\u0e34\u0e14\u0e40\u0e21\u0e37\u0e48\u0e2d\u0e04\u0e38\u0e13\u0e01\u0e14\u0e1b\u0e38\u0e48\u0e21\u0e40\u0e17\u0e48\u0e32\u0e19\u0e31\u0e49\u0e19 \u0e41\u0e25\u0e30\u0e2a\u0e32\u0e21\u0e32\u0e23\u0e16\u0e01\u0e25\u0e31\u0e1a\u0e21\u0e32\u0e2b\u0e19\u0e49\u0e32\u0e19\u0e35\u0e49\u0e44\u0e14\u0e49\u0e17\u0e38\u0e01\u0e40\u0e21\u0e37\u0e48\u0e2d"
+});
+
+const SHARED_ICON_PATHS = {
+  features: "M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z",
+  compare: "m7 4 4 4-4 4V9H2V7h5V4zm10 8-4 4 4 4v-3h5v-2h-5v-3z",
+  changelog: "M4 4h3v3H4zm5 0h11v3H9zM4 10h3v3H4zm5 0h11v3H9zM4 16h3v3H4zm5 0h11v3H9z",
+  download: "M11 3h2v10l3.5-3.5 1.4 1.4L12 16.8 6.1 10.9l1.4-1.4L11 13zm-7 16h16v2H4z",
+  install: "M3 4h8a3 3 0 0 1 3 3v13a3 3 0 0 0-3-3H3zm18 0h-5v13h5z",
+  legal: "M12 2 21 6v6c0 5.5-3.8 9-9 10-5.2-1-9-4.5-9-10V6zm0 4.2L6 8.8V12c0 3.6 2.2 5.9 6 7 3.8-1.1 6-3.4 6-7V8.8z",
+  community: "M8.5 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zm7-1a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 20v-2c0-3.3 2.9-5 6.5-5s6.5 1.7 6.5 5v2zm13.2 0v-2.2c0-1.6-.6-3-1.7-4 3.6-.4 6.5 1.1 6.5 4.2v2z",
+  product: "M4 4h16v5H4zm0 7h7v9H4zm9 0h7v9h-7z",
+  help: "M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm.1 16.2a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5zm2.2-6.6-.9.6c-.5.3-.6.6-.6 1.3v.4h-2v-.6c0-1.2.4-2 1.4-2.7l.9-.6c.7-.5 1-1 1-1.6 0-1.1-.8-1.8-2.1-1.8-1.2 0-2 .6-2.7 1.7L7.7 7.2C8.7 5.5 10.2 4.6 12 4.6c2.6 0 4.4 1.4 4.4 3.7 0 1.4-.7 2.5-2.1 3.3z",
+  shield: "M12 2 20 5v6c0 5-3.4 8.3-8 10-4.6-1.7-8-5-8-10V5zm-1.1 13.5 5.4-5.4-1.4-1.4-4 4-1.9-1.9-1.4 1.4z",
+  sparkles: "m12 2 1.2 4.1L17 8l-3.8 1.9L12 14l-1.2-4.1L7 8l3.8-1.9zM5 13l.8 2.7L8.5 17l-2.7 1.3L5 21l-.8-2.7L1.5 17l2.7-1.3zm13-1 .9 3.1L22 16.5l-3.1 1.4L18 21l-.9-3.1-3.1-1.4 3.1-1.4z",
+  package: "m12 2 9 4.5v11L12 22l-9-4.5v-11zm0 2.2L6 7.1l6 2.9 6-2.9zM5 8.7v7.5l6 3v-7.5zm14 0-6 3v7.5l6-3z"
+};
+
+function sharedSvg(name, className = "nav-icon") {
+  return `<svg class="${className}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="${SHARED_ICON_PATHS[name]}"></path></svg>`;
+}
+
+function createSharedSvgNode(name, className = "nav-icon") {
+  const svg = document.createElementNS(SVG_NAMESPACE, "svg");
+  svg.setAttribute("class", className);
+  svg.setAttribute("viewBox", "0 0 24 24");
+  svg.setAttribute("aria-hidden", "true");
+  svg.setAttribute("focusable", "false");
+  const path = document.createElementNS(SVG_NAMESPACE, "path");
+  path.setAttribute("d", SHARED_ICON_PATHS[name] || "");
+  svg.append(path);
+  return svg;
+}
+
+function replaceStaticChildren(container, markup) {
+  const parsed = new DOMParser().parseFromString(`<div>${markup}</div>`, "text/html").body.firstElementChild;
+  if (!parsed) return;
+  container.replaceChildren(...Array.from(parsed.childNodes));
+}
+
+function renderSharedChrome() {
+  const page = document.body.dataset.page || "home";
+  const header = document.querySelector(".site-header");
+  if (header) {
+    header.className = `site-header${page === "home" ? " is-hero" : ""}`;
+    replaceStaticChildren(header, `
+      <a class="brand" href="/#top" aria-label="NamLauncher home">
+        <img src="/assets/namlauncher-icon.png" alt="" />
+        <span>NamLauncher</span><span class="beta-pill" data-i18n="brand.beta">Stable</span>
+      </a>
+      <nav id="site-nav" class="site-nav" aria-label="Primary navigation" data-i18n-aria-label="nav.aria">
+        <a href="/#features">${sharedSvg("features")}<span data-i18n="nav.features">Features</span></a>
+        <a href="/#compare">${sharedSvg("compare")}<span data-i18n="nav.compare">Compare</span></a>
+        <a href="/changelog"${page === "history" ? ' aria-current="page"' : ""}>${sharedSvg("changelog")}<span data-i18n="nav.changelog">Updates</span></a>
+        <a href="/#download">${sharedSvg("download")}<span data-i18n="nav.download">Download</span></a>
+        <a href="/how-to-install"${page === "install" ? ' aria-current="page"' : ""}>${sharedSvg("install")}<span data-i18n="nav.install">Install guide</span></a>
+        <a href="/legal"${page === "legal" ? ' aria-current="page"' : ""}>${sharedSvg("legal")}<span data-i18n="nav.legal">Legal</span></a>
+      </nav>
+      <div class="header-controls">
+        <button class="button button--ghost button--sm theme-toggle" type="button" data-theme-toggle aria-label="Switch theme" data-tooltip="Switch theme">
+          <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.5"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"></path></svg>
+          <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z"></path></svg>
+        </button>
+        <div class="language-switcher" role="group" aria-label="Language" data-i18n-aria-label="language.aria">
+          <button class="button button--ghost button--sm" type="button" data-lang-option="en" aria-pressed="false" data-tooltip="English"><svg class="language-icon" viewBox="0 0 30 20" aria-hidden="true"><rect width="30" height="20" rx="2" fill="#012169"/><path d="M0 0 30 20M30 0 0 20" stroke="#fff" stroke-width="4"/><path d="M0 0 30 20M30 0 0 20" stroke="#c8102e" stroke-width="2"/><path d="M15 0v20M0 10h30" stroke="#fff" stroke-width="6"/><path d="M15 0v20M0 10h30" stroke="#c8102e" stroke-width="3.2"/></svg><span>EN</span></button>
+          <button class="button button--ghost button--sm" type="button" data-lang-option="th" aria-pressed="true" data-tooltip="ภาษาไทย"><svg class="language-icon" viewBox="0 0 30 20" aria-hidden="true"><rect width="30" height="20" rx="2" fill="#a51931"/><path d="M0 4h30v12H0z" fill="#fff"/><path d="M0 7h30v6H0z" fill="#2d2a4a"/></svg><span>TH</span></button>
+        </div>
+        <button class="mobile-menu-toggle" type="button" data-mobile-menu-toggle aria-controls="site-nav" aria-expanded="false" aria-label="Open navigation" data-i18n-aria-label="nav.open"><span></span><span></span><span></span></button>
+      </div>`);
+  }
+
+  const footer = document.querySelector(".site-footer");
+  if (footer) {
+    footer.id = "footer";
+    footer.className = "site-footer";
+    replaceStaticChildren(footer, `
+      <div class="footer-inner">
+        <div class="footer-brand-column">
+          <a class="footer-brand" href="/#top" aria-label="NamLauncher home"><img src="/assets/namlauncher-icon.png" alt="" /><span><strong>NamLauncher</strong><small>Minecraft launcher</small></span></a>
+          <p data-i18n="footer.description">A community-focused Minecraft Java launcher with separate instances, managed runtimes, skins, mods, and guided support.</p>
+          <p class="footer-made"><span data-i18n="footer.made">Made with 💙 by</span> <a href="https://nattapat2871.me" rel="me">nattapat2871</a></p>
+          <div class="footer-socials" aria-label="NamLauncher social links" data-i18n-aria-label="footer.socialsAria"><a href="https://github.com/NamLauncher" target="_blank" rel="noopener" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .7a11.3 11.3 0 0 0-3.6 22c.6.1.8-.2.8-.6v-2.2c-3.3.7-4-1.4-4-1.4-.6-1.4-1.4-1.8-1.4-1.8-1.1-.8.1-.8.1-.8 1.2.1 1.9 1.3 1.9 1.3 1.1 1.9 2.9 1.4 3.6 1.1.1-.8.4-1.4.8-1.7-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .4.2.7.8.6A11.3 11.3 0 0 0 12 .7Z"/></svg></a><a href="/discord" aria-label="Discord"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.3 4.4A17 17 0 0 0 16.2 3l-.5 1a15 15 0 0 0-7.4 0l-.5-1a17 17 0 0 0-4.1 1.4C1.1 8.3.4 12.1.8 15.8a17 17 0 0 0 5 2.5l1.2-1.6a10 10 0 0 1-1.9-.9l.5-.4a12.2 12.2 0 0 0 12.8 0l.5.4a12 12 0 0 1-1.9.9l1.2 1.6a17 17 0 0 0 5-2.5c.5-4.3-.8-8.1-2.9-11.4ZM8.4 13.5c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.9.9 1.8 2c0 1.1-.8 2-1.8 2Zm7.2 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.9.9 1.8 2c0 1.1-.8 2-1.8 2Z"/></svg></a></div>
+        </div>
+        <nav class="footer-column" aria-label="Product"><strong><span class="footer-heading-icon" aria-hidden="true">${sharedSvg("product", "section-symbol-svg")}</span><span data-i18n="footer.productHeading">Product</span></strong><a href="/#features" data-i18n="nav.features">Features</a><a href="/#loaders" data-i18n="nav.loaders">Loaders</a><a href="/#compare" data-i18n="nav.compare">Compare</a><a href="/#download" data-i18n="nav.download">Download</a></nav>
+        <nav class="footer-column" aria-label="Community"><strong><span class="footer-heading-icon" aria-hidden="true">${sharedSvg("community", "section-symbol-svg")}</span><span data-i18n="footer.communityHeading">Community</span></strong><a href="/discord">Discord</a><a href="/changelog" data-i18n="nav.changelog">Updates</a><a href="https://github.com/NamLauncher/NamLauncher" target="_blank" rel="noopener" data-i18n="signing.source">Public source</a><a href="https://nattapat2871.me" rel="me" data-i18n="actions.mainSite">Main website</a></nav>
+        <nav class="footer-column" aria-label="Help and information"><strong><span class="footer-heading-icon" aria-hidden="true">${sharedSvg("help", "section-symbol-svg")}</span><span data-i18n="footer.helpHeading">Help & information</span></strong><a href="/how-to-install" data-i18n="nav.install">Install guide</a><a href="/legal" data-i18n="nav.legal">Legal</a><a href="/#code-signing-policy" data-i18n="download.codeSigningPolicy">Code signing policy</a><a href="https://github.com/NamLauncher/NamLauncher/issues" target="_blank" rel="noopener" data-i18n="footer.reportIssue">Report an issue</a></nav>
+      </div>
+      <div class="footer-bottom"><p class="footer-copyright" data-footer-copyright>Copyright © <span data-current-year>2026</span> <a class="footer-owner" href="https://nattapat2871.me" rel="me">Nattapat2871</a>. All rights reserved.</p><p data-i18n="footer.disclaimer">NamLauncher is not an official Minecraft service and is not affiliated with Mojang or Microsoft.</p><a class="button button--primary footer-discord" href="/discord"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.3 4.4A17 17 0 0 0 16.2 3l-.5 1a15 15 0 0 0-7.4 0l-.5-1a17 17 0 0 0-4.1 1.4C1.1 8.3.4 12.1.8 15.8a17 17 0 0 0 5 2.5l1.2-1.6a10 10 0 0 1-1.9-.9l.5-.4a12.2 12.2 0 0 0 12.8 0l.5.4a12 12 0 0 1-1.9.9l1.2 1.6a17 17 0 0 0 5-2.5c.5-4.3-.8-8.1-2.9-11.4ZM8.4 13.5c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.9.9 1.8 2c0 1.1-.8 2-1.8 2Zm7.2 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.9.9 1.8 2c0 1.1-.8 2-1.8 2Z"/></svg><span data-i18n="footer.joinDiscord">Join our Discord</span></a></div>`);
+  }
+}
+
+renderSharedChrome();
+
 const elements = {
   siteHeader: document.querySelector(".site-header"),
   siteNav: document.querySelector("#site-nav"),
+  featuresSection: document.querySelector("#features"),
+  headerExpansionSentinel: document.querySelector("[data-header-expansion-sentinel]"),
   themeToggle: document.querySelector("[data-theme-toggle]"),
   mobileMenuToggle: document.querySelector("[data-mobile-menu-toggle]"),
   backToTop: document.querySelector("[data-back-to-top]"),
@@ -1037,6 +1205,9 @@ function applyTranslations() {
   } else if (page === "install") {
     document.title = t("meta.install.title");
     setMeta("meta[name='description']", t("meta.install.description"));
+  } else if (page === "discord") {
+    document.title = t("meta.discord.title");
+    setMeta("meta[name='description']", t("meta.discord.description"));
   } else {
     document.title = t("meta.home.title");
     setMeta("meta[name='description']", t("meta.home.description"));
@@ -1045,6 +1216,8 @@ function applyTranslations() {
   if (currentDeveloperProfile) renderDeveloperActivity(currentDeveloperProfile);
   if (activeStatusKey) setStatusKey(activeStatusKey, activeStatusIsError);
   renderDownloadPickers();
+  applyManagedSiteImages();
+  enhancePageIcons();
   if (elements.mobileMenuToggle) {
     setMobileNavigation(elements.mobileMenuToggle.getAttribute("aria-expanded") === "true");
   }
@@ -1277,7 +1450,14 @@ function createLegalReferences(references) {
 function renderLegalCard(card, titleText, entries, references = null) {
   if (!card || !Array.isArray(entries)) return;
   const title = document.createElement("h2");
-  title.textContent = titleText;
+  title.className = "heading-with-icon";
+  const icon = document.createElement("span");
+  icon.className = "heading-icon";
+  icon.setAttribute("aria-hidden", "true");
+  icon.append(createSharedSvgNode("legal", "section-symbol-svg"));
+  const titleCopy = document.createElement("span");
+  titleCopy.textContent = titleText;
+  title.append(icon, titleCopy);
   const children = [title];
   entries.forEach((entry) => children.push(createLegalTextBlock(entry)));
   const referenceList = createLegalReferences(references);
@@ -1737,6 +1917,7 @@ function renderDownloadMenu(menu) {
     "linux-arch-x64"
   ];
   const fragment = document.createDocumentFragment();
+  let itemCount = 0;
   order.forEach((id, index) => {
     const artifact = artifactById(id);
     if (!artifact) return;
@@ -1747,8 +1928,72 @@ function renderDownloadMenu(menu) {
       fragment.append(heading);
     }
     fragment.append(createDownloadMenuItem(artifact));
+    itemCount += 1;
   });
+  if (itemCount === 0) {
+    const empty = document.createElement("p");
+    empty.className = "download-menu-empty";
+    empty.setAttribute("role", "status");
+    empty.textContent = t("actions.noDownloads");
+    fragment.append(empty);
+  }
   menu.replaceChildren(fragment);
+}
+
+function enhancePageIcons() {
+  const hero = document.querySelector(".install-hero, .history-hero, .legal-hero, .discord-hero");
+  if (hero && !hero.querySelector(".page-symbol")) {
+    const symbolName = document.body.dataset.page === "install"
+      ? "install"
+      : document.body.dataset.page === "history"
+        ? "changelog"
+        : document.body.dataset.page === "discord"
+          ? "community"
+          : "legal";
+    const symbol = document.createElement("span");
+    symbol.className = `page-symbol is-${symbolName}`;
+    symbol.setAttribute("aria-hidden", "true");
+    symbol.append(createSharedSvgNode(symbolName, "page-symbol-svg"));
+    const eyebrow = hero.querySelector(".eyebrow");
+    if (eyebrow) eyebrow.before(symbol);
+    else hero.prepend(symbol);
+  }
+
+  document.querySelectorAll(".platform-mark").forEach((mark) => {
+    const value = mark.textContent?.trim().toLowerCase();
+    const platform = value === "w" ? "windows" : value === "m" ? "macos" : value === "l" ? "linux" : "";
+    if (platform) renderPlatformSvg(mark, platform);
+  });
+
+  const prependHeadingIcon = (heading, iconName) => {
+    if (!heading || heading.querySelector("[data-heading-icon]")) return;
+    heading.classList.add("heading-with-icon");
+    const icon = document.createElement("span");
+    icon.className = "heading-icon";
+    icon.dataset.headingIcon = iconName;
+    icon.setAttribute("aria-hidden", "true");
+    icon.append(createSharedSvgNode(iconName, "section-symbol-svg"));
+    heading.prepend(icon);
+  };
+
+  const headingIcons = [
+    ["#features .section-heading h2", "features"],
+    ["#code-signing-policy .section-heading h2", "shield"],
+    ["#loaders .section-heading h2", "package"],
+    ["#latest .section-heading h2", "sparkles"],
+    ["#compare .section-heading > h2", "compare"],
+    ["#changelog .section-heading h2", "changelog"],
+    ["#screenshots .section-heading h2", "sparkles"],
+    ["#partners .section-heading h2", "community"],
+    ["#download h2", "download"],
+    [".install-help h2", "help"],
+    [".install-note h3", "shield"],
+    [".install-note--warning h3", "legal"],
+    [".legal-card > h2", "legal"]
+  ];
+  headingIcons.forEach(([selector, iconName]) => {
+    document.querySelectorAll(selector).forEach((heading) => prependHeadingIcon(heading, iconName));
+  });
 }
 
 function renderDownloadPickers() {
@@ -1789,6 +2034,54 @@ function renderDownloadPickers() {
     if (integrityAvailable) link.href = macosArtifact.checksum_url;
     else link.href = "/#download";
   });
+  const maintenanceMessage = siteContentPolicy?.downloads?.[activeLanguage === "th" ? "message_th" : "message_en"];
+  if (siteContentPolicy?.downloads?.enabled === false && maintenanceMessage) {
+    setText(elements.downloadStatus, maintenanceMessage);
+    elements.downloadStatus?.classList.add("is-error");
+  }
+}
+
+const SITE_IMAGE_SELECTORS = {
+  "hero-logo": ".hero-logo",
+  "namemc-icon": 'img[src="https://s.namemc.com/img/favicon.svg"]',
+  "loader-vanilla": 'img[src="/assets/loaders/vanilla.svg"]',
+  "loader-fabric": 'img[src="/assets/loaders/fabric.svg"]',
+  "loader-forge": 'img[src="/assets/loaders/forge.svg"]',
+  "loader-neoforge": 'img[src="/assets/loaders/neoforge.svg"]',
+  "loader-quilt": 'img[src="/assets/loaders/quilt.svg"]',
+  "proof-instance": 'img[src^="/assets/namlauncher-gallery-instance-content.png"]',
+  "proof-library": 'img[src="/assets/namlauncher-proof-library.svg"]',
+  "proof-badge": 'img[src^="/assets/namlauncher-proof-badge.png"]',
+  "compare-tlauncher": 'img[src="https://i.tlauncher.org/images/tl-mods-en.png"]',
+  "compare-modrinth": 'img[src="https://cdn.modrinth.com/app-landing/instance-2026.webp"]',
+  "compare-curseforge": 'img[src^="https://s3.amazonaws.com/cdn.freshdesk.com/"]',
+  "compare-lunar": 'img[src^="https://cmsassets.lunarclientcdn.com/"]',
+  "compare-prism": 'img[src^="https://www.prismlauncher.org/"]',
+  "compare-atlauncher": 'img[src="/assets/brands/atlauncher-packs.webp"]',
+  "partner-minisand": 'img[src="/assets/minisand-logo.png"]',
+  "partner-teddyblock": 'img[src^="https://tdblock.online/"]',
+  "partner-namcraft": 'img[src^="https://namcraft.nattapat2871.me/"]'
+};
+
+function applyManagedSiteImages() {
+  const images = siteContentPolicy?.images;
+  if (!images || typeof images !== "object") return;
+  Object.entries(SITE_IMAGE_SELECTORS).forEach(([slot, selector]) => {
+    const item = images[slot];
+    if (!item || !/^\/assets\/managed\/[a-z0-9.-]+$/.test(String(item.url || ""))) return;
+    document.querySelectorAll(selector).forEach((image) => {
+      image.src = item.url;
+      image.alt = String(item[activeLanguage === "th" ? "alt_th" : "alt_en"] || "").slice(0, 240);
+    });
+  });
+}
+
+async function loadSiteContent() {
+  const response = await fetch(SITE_CONTENT_URL, { cache: "no-store", headers: { Accept: "application/json" } });
+  if (!response.ok) throw new Error("Website content request failed");
+  siteContentPolicy = await response.json();
+  applyManagedSiteImages();
+  renderDownloadPickers();
 }
 
 function supportsPopover(menu) {
@@ -2091,6 +2384,51 @@ function updateBackToTop() {
   button.tabIndex = visible ? 0 : -1;
 }
 
+function setHeaderExpanded(expanded) {
+  const header = elements.siteHeader;
+  if (!header) return;
+  header.classList.toggle("is-hero", !expanded);
+  header.classList.toggle("is-expanded", expanded);
+}
+
+function updateHeaderExpansion() {
+  const header = elements.siteHeader;
+  const sentinel = elements.headerExpansionSentinel;
+  if (!header || !sentinel) return;
+  setHeaderExpanded(sentinel.getBoundingClientRect().top <= header.offsetHeight + 28);
+}
+
+function setupHeaderExpansionObserver() {
+  headerExpansionObserver?.disconnect();
+  headerExpansionObserver = null;
+  const header = elements.siteHeader;
+  const sentinel = elements.headerExpansionSentinel;
+  if (!header || !sentinel || typeof IntersectionObserver === "undefined") {
+    updateHeaderExpansion();
+    return;
+  }
+  const threshold = Math.ceil(header.offsetHeight + 28);
+  headerExpansionObserver = new IntersectionObserver(([entry]) => {
+    const passedHeader = !entry.isIntersecting && entry.boundingClientRect.top < threshold;
+    setHeaderExpanded(passedHeader);
+  }, { rootMargin: `-${threshold}px 0px 0px 0px`, threshold: 0 });
+  headerExpansionObserver.observe(sentinel);
+}
+
+function setupAmbientMotion() {
+  ambientMotionObserver?.disconnect();
+  ambientMotionObserver = null;
+  const roots = Array.from(document.querySelectorAll(".hero, .section"));
+  if (typeof IntersectionObserver === "undefined") {
+    roots.forEach((root) => root.classList.add("is-ambient-active"));
+    return;
+  }
+  ambientMotionObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => entry.target.classList.toggle("is-ambient-active", entry.isIntersecting));
+  }, { rootMargin: "160px 0px", threshold: 0 });
+  roots.forEach((root) => ambientMotionObserver.observe(root));
+}
+
 function currentHashTarget() {
   const rawHash = window.location.hash.slice(1);
   if (!rawHash) return null;
@@ -2212,6 +2550,7 @@ function bindEvents() {
     closeDownloadMenus();
     if (window.innerWidth > 920) setMobileNavigation(false);
     updateBackToTop();
+    updateHeaderExpansion();
     scheduleResponsiveLayoutMotion();
   });
   let scrollFrame = 0;
@@ -2226,6 +2565,7 @@ function bindEvents() {
         }
       });
       updateBackToTop();
+      if (!headerExpansionObserver) updateHeaderExpansion();
       scrollFrame = 0;
     });
   }, { passive: true });
@@ -2233,7 +2573,12 @@ function bindEvents() {
   window.addEventListener("wheel", cancelInitialHashAlignment, { passive: true });
   window.addEventListener("touchstart", cancelInitialHashAlignment, { passive: true });
   window.addEventListener("pointerdown", cancelInitialHashAlignment, { passive: true });
+  document.addEventListener("visibilitychange", () => {
+    document.documentElement.classList.toggle("is-page-hidden", document.hidden);
+  });
   updateBackToTop();
+  setupHeaderExpansionObserver();
+  setupAmbientMotion();
 }
 
 const MOTION_TARGET_SELECTOR = [
@@ -2408,6 +2753,7 @@ function setupMotion() {
 }
 
 function init() {
+  enhancePageIcons();
   applyTheme();
   applyTranslations();
   refreshLiveNumbers({ recordView: true }).catch(() => setStatusKey("status.statsOffline", true));
@@ -2419,6 +2765,7 @@ function init() {
     latestRelease = { artifacts: [] };
     renderDownloadPickers();
   });
+  loadSiteContent().catch(() => {});
   loadChangelog().catch(renderChangelogError);
   loadLegalDocument().catch(() => {});
   connectDeveloperActivitySocket();
@@ -2429,6 +2776,8 @@ window.addEventListener("load", queueHashAlignment);
 window.addEventListener("pagehide", () => {
   cancelInitialHashAlignment();
   motionObserver?.disconnect();
+  headerExpansionObserver?.disconnect();
+  ambientMotionObserver?.disconnect();
   window.cancelAnimationFrame(layoutMotionFrame);
   window.clearTimeout(layoutMotionTimer);
   window.clearTimeout(resizeMotionTimer);

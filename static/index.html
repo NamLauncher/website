@@ -74,7 +74,7 @@
     </script>
   </head>
   <body data-page="home">
-    <header class="site-header">
+    <header class="site-header is-hero">
       <a class="brand" href="#top" aria-label="NamLauncher home">
         <img src="/assets/namlauncher-icon.png" alt="" />
         <span>NamLauncher</span>
@@ -82,16 +82,11 @@
       </a>
       <nav id="site-nav" class="site-nav" aria-label="Primary navigation" data-i18n-aria-label="nav.aria">
         <a href="#features"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></svg><span data-i18n="nav.features">Features</span></a>
-        <a href="#loaders"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6v4h4v6h-4v4H9v-4H5V7h4z"/></svg><span data-i18n="nav.loaders">Loaders</span></a>
-        <a href="#latest"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 1-8.5 6h3A6.2 6.2 0 1 0 12 5.8V9L7 4l5-4v3zm-1 4h2v5.1l3.4 2-1 1.7-4.4-2.6V7z"/></svg><span data-i18n="nav.latest">New in 1.2.3</span></a>
         <a href="#compare"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 4 4 4-4 4V9H2V7h5V4zm10 8-4 4 4 4v-3h5v-2h-5v-3z"/></svg><span data-i18n="nav.compare">Compare</span></a>
         <a href="/changelog"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h3v3H4zm5 0h11v3H9zM4 10h3v3H4zm5 0h11v3H9zM4 16h3v3H4zm5 0h11v3H9z"/></svg><span data-i18n="nav.changelog">Updates</span></a>
-        <a href="#instances"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 10 5-10 5L2 7zm-8.8 9L12 15.4 20.8 11 22 13.5l-10 5-10-5zm0 5L12 20.4l8.8-4.4 1.2 2.5-10 5-10-5z"/></svg><span data-i18n="nav.instances">Instances</span></a>
-        <a href="#developer"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 2c-5.5 0-9 2.7-9 6v2h18v-2c0-3.3-3.5-6-9-6z"/></svg><span data-i18n="nav.developer">Developer</span></a>
         <a href="#download"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3h2v10l3.5-3.5 1.4 1.4L12 16.8 6.1 10.9l1.4-1.4L11 13zm-7 16h16v2H4z"/></svg><span data-i18n="nav.download">Download</span></a>
         <a href="/how-to-install"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h8a3 3 0 0 1 3 3v13a3 3 0 0 0-3-3H3zm18 0h-5v13h5z"/></svg><span data-i18n="nav.install">Install guide</span></a>
         <a href="/legal"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 21 6v6c0 5.5-3.8 9-9 10-5.2-1-9-4.5-9-10V6zm0 4.2L6 8.8V12c0 3.6 2.2 5.9 6 7 3.8-1.1 6-3.4 6-7V8.8z"/></svg><span data-i18n="nav.legal">Legal</span></a>
-        <a href="https://nattapat2871.me" rel="me"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3h7v7h-2V6.4l-8.3 8.3-1.4-1.4L17.6 5H14zM5 5h6v2H7v10h10v-4h2v6H5z"/></svg><span data-i18n="nav.mainSite">Main Site</span></a>
       </nav>
       <div class="header-controls">
         <button class="button button--ghost button--sm theme-toggle" type="button" data-theme-toggle aria-label="Switch to light mode" data-tooltip="Switch to light mode">
@@ -162,16 +157,22 @@
               Visit Nattapat2871.me
             </a>
           </div>
+          <p class="hero-signing-note" data-i18n="hero.signingNote">
+            NamLauncher is currently applying to the SignPath Foundation for free code signing. The current public release remains unsigned.
+          </p>
           <div class="hero-metrics" aria-label="NamLauncher live numbers" data-i18n-aria-label="stats.aria">
             <div>
+              <svg class="metric-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3h2v10l3.5-3.5 1.4 1.4L12 16.8 6.1 10.9l1.4-1.4L11 13zm-7 16h16v2H4z"/></svg>
               <span id="downloadsCount">0</span>
               <p data-i18n="stats.downloads">Downloads</p>
             </div>
             <div>
+              <svg class="metric-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm8 1c-3.3 0-6 1.8-6 4v3h12v-3c0-2.2-2.7-4-6-4zM8 14c-3.3 0-6 1.8-6 4v2h6v-3c0-1.1.4-2.1 1.1-3H8z"/></svg>
               <span id="onlineCount">0</span>
               <p data-i18n="stats.online">Online now</p>
             </div>
             <div>
+              <svg class="metric-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 3 6v6c0 5.2 3.5 8.6 9 10 5.5-1.4 9-4.8 9-10V6zm-1 14-4-4 1.4-1.4L11 13.2l5.6-5.6L18 9z"/></svg>
               <span id="releaseVersion">1.2.3</span>
               <p data-i18n="stats.version">Current stable</p>
             </div>
@@ -179,6 +180,7 @@
         </div>
       </section>
 
+      <span class="header-expansion-sentinel" data-header-expansion-sentinel aria-hidden="true"></span>
       <section id="features" class="section features-section">
         <div class="section-heading">
           <p class="eyebrow" data-i18n="features.eyebrow">What you can do</p>
@@ -233,6 +235,35 @@
             </p>
           </article>
         </div>
+      </section>
+
+      <section id="code-signing-policy" class="section signing-policy-section" aria-labelledby="code-signing-policy-title">
+        <div class="signing-policy-heading">
+          <p class="eyebrow" data-i18n="signing.eyebrow">Release trust</p>
+          <h2 id="code-signing-policy-title" data-i18n="signing.title">Code signing policy</h2>
+          <span class="signing-status" data-i18n="signing.status">Application pending review</span>
+          <p class="signing-attribution">
+            <strong data-i18n="signing.attributionLead">Planned provider after approval</strong>
+            <span data-i18n="signing.attribution">Free code signing provided by SignPath.io, certificate by SignPath Foundation.</span>
+          </p>
+        </div>
+        <article class="card card--secondary signing-policy-card">
+          <p data-i18n="signing.scope">NamLauncher is currently applying to the SignPath Foundation for free code signing. The current public release remains unsigned. If approved, future official Windows releases will be signed through SignPath.io with a certificate issued by the SignPath Foundation.</p>
+          <div class="signing-project-status">
+            <strong data-i18n="signing.openSource">Open-source project status</strong>
+            <span data-i18n="signing.openSourceBody">Development began privately in June 2026. The launcher source and its build workflow are now public under GPL-3.0 in the official NamLauncher GitHub organization.</span>
+          </div>
+          <div class="signing-policy-roles signing-policy-roles--single" aria-label="Project maintainer" data-i18n-aria-label="signing.rolesAria">
+            <span><strong data-i18n="signing.maintainer">Author, reviewer, and approver</strong><a href="https://github.com/Nattapat2871" rel="me">Nattapat2871</a></span>
+          </div>
+          <div class="signing-policy-actions">
+            <a class="button button--primary button--sm" href="https://github.com/NamLauncher/NamLauncher/blob/main/CODE_SIGNING_POLICY.md" target="_blank" rel="noopener" data-i18n="signing.fullPolicy">Read the full policy</a>
+            <a class="button button--outline button--sm" href="/legal" data-i18n="signing.privacy">Privacy Notice</a>
+            <a class="button button--outline button--sm" href="https://github.com/NamLauncher/NamLauncher" target="_blank" rel="noopener" data-i18n="signing.source">Public source</a>
+            <a class="button button--ghost button--sm" href="https://signpath.io/" target="_blank" rel="noopener" data-i18n="signing.signpath">SignPath.io</a>
+            <a class="button button--ghost button--sm" href="https://signpath.org/" target="_blank" rel="noopener" data-i18n="signing.foundation">SignPath Foundation</a>
+          </div>
+        </article>
       </section>
 
       <section id="loaders" class="section loaders-section" aria-labelledby="loaders-title">
@@ -417,6 +448,10 @@
             <a class="compare-media" href="https://www.prismlauncher.org/" target="_blank" rel="noopener noreferrer"><img src="https://www.prismlauncher.org/_astro/linux_light.jDSJ-320_Z2wzXS8.png" alt="Prism Launcher instances screen" loading="lazy" decoding="async" referrerpolicy="no-referrer" /></a>
             <div class="compare-copy"><span class="compare-name">Prism Launcher</span><h4 data-i18n="comparison.prism.title">The closest match for instances and two providers</h4><p data-i18n="comparison.prism.body">Prism already manages instances and installs from both Modrinth and CurseForge. NamLauncher's added focus is Thai-first guidance, managed in-game identity, Discord linking, guided troubleshooting, and a launcher update flow designed for its community.</p><a href="https://www.prismlauncher.org/" target="_blank" rel="noopener noreferrer"><span data-i18n="comparison.source">Official feature page</span><span aria-hidden="true">↗</span></a></div>
           </article>
+          <article class="compare-card compare-card--atlauncher card card--secondary">
+            <a class="compare-media" href="https://atlauncher.com/" target="_blank" rel="noopener noreferrer"><img src="/assets/brands/atlauncher-packs.webp" alt="ATLauncher Packs tab" loading="lazy" decoding="async" /></a>
+            <div class="compare-copy"><span class="compare-name">ATLauncher</span><h4 data-i18n="comparison.atlauncher.title">A broad modpack launcher with several catalogs</h4><p data-i18n="comparison.atlauncher.body">ATLauncher provides its own modpacks and can browse packs from CurseForge, Modrinth, and Technic. NamLauncher differs through Thai-first guidance, managed Java, in-game identity, Discord linking, and support tools built around its community.</p><a href="https://atlauncher.com/" target="_blank" rel="noopener noreferrer"><span data-i18n="comparison.source">Official feature page</span><span aria-hidden="true">↗</span></a></div>
+          </article>
         </div>
         <p class="comparison-note" data-i18n="comparison.note">Checked against official public pages on 12 September 2026. Features may change. Product names, screenshots, and trademarks belong to their respective owners; no endorsement is implied.</p>
       </section>
@@ -439,42 +474,6 @@
             <span data-i18n="changelog.viewAll">Open the full release history</span>
             <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m7 4 6 6-6 6"></path></svg>
           </a>
-        </div>
-      </section>
-
-      <section id="instances" class="section instance-section">
-        <div class="section-heading">
-          <p class="eyebrow" data-i18n="instances.eyebrow">Instances</p>
-          <h2 data-i18n="instances.title">Open one instance and everything for that game is there.</h2>
-        </div>
-        <div class="instance-showcase">
-          <div class="showcase-sidebar" aria-hidden="true">
-            <img src="/assets/namlauncher-icon.png" alt="" />
-            <span class="is-active">Instances</span>
-            <span>Library</span>
-            <span>Settings</span>
-          </div>
-          <div class="showcase-content">
-            <div class="instance-row">
-              <img src="/assets/namlauncher-icon.png" alt="" />
-              <div>
-                <strong data-i18n="preview.instance">Slime Adventure</strong>
-                <p>Minecraft 1.21.1 / Fabric</p>
-              </div>
-              <span data-i18n="preview.ready">Ready</span>
-            </div>
-            <div class="content-tabs" aria-hidden="true">
-              <span>Mods</span>
-              <span>Resource packs</span>
-              <span>Shaders</span>
-              <span>Logs</span>
-            </div>
-            <div class="mod-list" aria-hidden="true">
-              <span>24 mods</span>
-              <span>latest.log</span>
-              <span>Java 21</span>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -778,80 +777,11 @@
         </div>
       </section>
 
-      <section id="developer" class="section developer-section">
+      <section id="partners" class="section developer-section">
         <div class="section-heading">
-          <p class="eyebrow" data-i18n="developer.eyebrow">Built by Nattapat2871</p>
-          <h2 data-i18n="developer.title">A solo student project, developed privately before going open source.</h2>
+          <p class="eyebrow" data-i18n="partner.sectionEyebrow">Server partners</p>
+          <h2 data-i18n="partner.sectionTitle">Communities you can join from NamLauncher.</h2>
         </div>
-
-        <div class="creator-layout">
-          <article class="card card--default creator-card">
-            <div id="creatorBanner" class="creator-banner" aria-hidden="true"></div>
-            <div class="creator-profile">
-              <span class="creator-avatar-shell">
-                <img
-                  id="creatorAvatar"
-                  class="creator-avatar"
-                  src="/assets/namlauncher-icon.png"
-                  alt="Nattapat2871"
-                />
-                <img id="creatorDecoration" class="creator-decoration" alt="" hidden />
-              </span>
-              <div>
-                <span class="creator-role" data-i18n="developer.role">Solo student developer and maintainer</span>
-                <h3 id="creatorName">Nattapat2871</h3>
-                <span id="creatorUsername" class="creator-username">@nattapat2871</span>
-              </div>
-            </div>
-            <p class="creator-description" data-i18n="developer.body">
-              Nattapat2871 began developing NamLauncher privately in June 2026 while learning software engineering and experimenting with Minecraft tooling. The launcher is built and maintained by one student, and its desktop source is now published under the GPL-3.0 license in the NamLauncher GitHub organization.
-            </p>
-            <div class="creator-responsibilities" aria-label="Project responsibilities" data-i18n-aria-label="developer.responsibilities.aria">
-              <span data-i18n="developer.responsibilities.product">Private development since June 2026</span>
-              <span data-i18n="developer.responsibilities.engineering">Solo student-maintained</span>
-              <span data-i18n="developer.responsibilities.design">Public GPL-3.0 launcher source</span>
-            </div>
-            <div class="creator-actions">
-              <a class="button button--primary primary-action is-compact" href="https://nattapat2871.me" rel="me">
-                <span data-i18n="developer.website">Open personal website</span>
-              </a>
-              <a class="button button--outline secondary-action is-compact" href="https://github.com/Nattapat2871" target="_blank" rel="noopener">
-                <span data-i18n="developer.github">GitHub</span>
-              </a>
-              <a class="button button--outline secondary-action is-compact" href="https://github.com/NamLauncher/NamLauncher" target="_blank" rel="noopener">
-                <span data-i18n="developer.source">NamLauncher source</span>
-              </a>
-            </div>
-          </article>
-
-          <article class="card card--secondary activity-card" aria-live="polite" aria-busy="true">
-            <div class="activity-heading">
-              <div>
-                <p class="activity-kicker" data-i18n="developer.activity.eyebrow">Live activity</p>
-                <h3 data-i18n="developer.activity.title">What Nattapat2871 is doing now</h3>
-              </div>
-              <span id="developerPresence" class="presence-pill is-loading">
-                <i aria-hidden="true"></i>
-                <span data-i18n="developer.loading">Loading</span>
-              </span>
-            </div>
-            <div id="developerPlatforms" class="activity-platforms" hidden></div>
-            <div id="developerActivities" class="activity-list">
-              <div class="activity-skeleton" aria-hidden="true"></div>
-              <div class="activity-skeleton" aria-hidden="true"></div>
-            </div>
-            <a
-              class="activity-source"
-              href="https://ame-api.nattapat2871.me/"
-              target="_blank"
-              rel="noopener"
-            >
-              <span data-i18n="developer.activity.source">AME API</span>
-              <span aria-hidden="true">↗</span>
-            </a>
-          </article>
-        </div>
-
         <div class="partner-grid" aria-label="NamLauncher server partners" data-i18n-aria-label="partner.aria">
           <a
             class="partner-card minisand-partner card card--secondary"
@@ -872,6 +802,32 @@
                 <code>play.minisand.online</code>
               </span>
               <span class="partner-description" data-i18n="partner.minisand.body">A NamLauncher partner server with its address ready in the launcher.</span>
+            </span>
+            <span class="partner-open">
+              <span data-i18n="partner.open">Visit server</span>
+              <span aria-hidden="true">↗</span>
+            </span>
+          </a>
+
+          <a
+            class="partner-card teddyblock-partner card card--secondary"
+            href="https://tdblock.online/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Visit the TeddyBlock website (opens in a new tab)"
+            data-i18n-aria-label="partner.teddyblock.linkLabel"
+          >
+            <span class="partner-logo-shell" aria-hidden="true">
+              <img src="https://tdblock.online/server/logo-128.png" alt="" loading="lazy" decoding="async" />
+            </span>
+            <span class="partner-copy">
+              <span class="partner-kicker" data-i18n="partner.eyebrow">Partner server</span>
+              <strong data-i18n="partner.teddyblock.title">TeddyBlock</strong>
+              <span class="partner-address">
+                <span data-i18n="partner.address">Server address</span>
+                <code>play.tdblock.online</code>
+              </span>
+              <span class="partner-description" data-i18n="partner.teddyblock.body">A NamLauncher partner server available from the launcher server list.</span>
             </span>
             <span class="partner-open">
               <span data-i18n="partner.open">Visit server</span>
@@ -905,31 +861,6 @@
             </span>
           </a>
 
-          <a
-            class="partner-card teddyblock-partner card card--secondary"
-            href="https://tdblock.online/"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Visit the TeddyBlock website (opens in a new tab)"
-            data-i18n-aria-label="partner.teddyblock.linkLabel"
-          >
-            <span class="partner-logo-shell" aria-hidden="true">
-              <img src="https://tdblock.online/server/logo-128.png" alt="" loading="lazy" decoding="async" />
-            </span>
-            <span class="partner-copy">
-              <span class="partner-kicker" data-i18n="partner.eyebrow">Partner server</span>
-              <strong data-i18n="partner.teddyblock.title">TeddyBlock</strong>
-              <span class="partner-address">
-                <span data-i18n="partner.address">Server address</span>
-                <code>play.tdblock.online</code>
-              </span>
-              <span class="partner-description" data-i18n="partner.teddyblock.body">A NamLauncher partner server available from the launcher server list.</span>
-            </span>
-            <span class="partner-open">
-              <span data-i18n="partner.open">Visit server</span>
-              <span aria-hidden="true">↗</span>
-            </span>
-          </a>
         </div>
       </section>
 
@@ -967,38 +898,6 @@
         </div>
       </section>
 
-      <section id="code-signing-policy" class="section signing-policy-section" aria-labelledby="code-signing-policy-title">
-        <div class="signing-policy-heading">
-          <p class="eyebrow" data-i18n="signing.eyebrow">Release trust</p>
-          <h2 id="code-signing-policy-title" data-i18n="signing.title">Code signing policy</h2>
-          <span class="signing-status" data-i18n="signing.status">Application pending review</span>
-          <p class="signing-attribution">
-            <strong data-i18n="signing.attributionLead">Planned provider after approval</strong>
-            <span data-i18n="signing.attribution">Free code signing provided by SignPath.io, certificate by SignPath Foundation.</span>
-          </p>
-        </div>
-        <article class="card card--secondary signing-policy-card">
-          <p data-i18n="signing.scope">
-            NamLauncher has applied to use SignPath Foundation for code signing. The current public installer remains unsigned. If approved, future official Windows releases will be signed through SignPath.io with a certificate issued by SignPath Foundation.
-          </p>
-          <div class="signing-project-status">
-            <strong data-i18n="signing.openSource">Open-source project status</strong>
-            <span data-i18n="signing.openSourceBody">Development began privately in June 2026. The launcher source and its build workflow are now public under GPL-3.0 in the official NamLauncher GitHub organization.</span>
-          </div>
-          <div class="signing-policy-roles" aria-label="Code signing team roles" data-i18n-aria-label="signing.rolesAria">
-            <span><strong data-i18n="signing.authors">Authors and committers</strong><a href="https://github.com/Nattapat2871" rel="me">Nattapat2871</a></span>
-            <span><strong data-i18n="signing.reviewers">Reviewers</strong><a href="https://github.com/Nattapat2871" rel="me">Nattapat2871</a></span>
-            <span><strong data-i18n="signing.approvers">Approvers</strong><a href="https://github.com/Nattapat2871" rel="me">Nattapat2871</a></span>
-          </div>
-          <div class="signing-policy-actions">
-            <a class="button button--primary button--sm" href="https://github.com/NamLauncher/NamLauncher/blob/main/CODE_SIGNING_POLICY.md" target="_blank" rel="noopener" data-i18n="signing.fullPolicy">Read the full policy</a>
-            <a class="button button--outline button--sm" href="/legal" data-i18n="signing.privacy">Privacy Notice</a>
-            <a class="button button--outline button--sm" href="https://github.com/NamLauncher/NamLauncher" target="_blank" rel="noopener" data-i18n="signing.source">Public source</a>
-            <a class="button button--ghost button--sm" href="https://signpath.io/" target="_blank" rel="noopener" data-i18n="signing.signpath">SignPath.io</a>
-            <a class="button button--ghost button--sm" href="https://signpath.org/" target="_blank" rel="noopener" data-i18n="signing.foundation">SignPath Foundation</a>
-          </div>
-        </article>
-      </section>
     </main>
 
     <div class="view-badge" data-tooltip="Page views" role="status" aria-live="polite">
@@ -1014,21 +913,47 @@
       <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 14 6-6 6 6"></path></svg>
     </button>
 
-    <footer class="site-footer">
-      <div class="footer-identity">
-        <span data-i18n="footer.product">NamLauncher Stable</span>
-        <p class="footer-copyright" data-footer-copyright>
-          Copyright © <span data-current-year>2026</span>
-          <a class="footer-owner" href="https://nattapat2871.me" rel="me">Nattapat2871</a>. All rights reserved.
-        </p>
+    <footer id="footer" class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-brand-column">
+          <a class="footer-brand" href="#top" aria-label="NamLauncher home">
+            <img src="/assets/namlauncher-icon.png" alt="" />
+            <span><strong>NamLauncher</strong><small>Minecraft launcher</small></span>
+          </a>
+          <p data-i18n="footer.description">A community-focused Minecraft Java launcher with separate instances, managed runtimes, skins, mods, and guided support.</p>
+          <p class="footer-made"><span data-i18n="footer.made">Made with 💙 by</span> <a href="https://nattapat2871.me" rel="me">nattapat2871</a></p>
+          <div class="footer-socials" aria-label="NamLauncher social links" data-i18n-aria-label="footer.socialsAria">
+            <a href="https://github.com/NamLauncher" target="_blank" rel="noopener" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .7a11.3 11.3 0 0 0-3.6 22c.6.1.8-.2.8-.6v-2.2c-3.3.7-4-1.4-4-1.4-.6-1.4-1.4-1.8-1.4-1.8-1.1-.8.1-.8.1-.8 1.2.1 1.9 1.3 1.9 1.3 1.1 1.9 2.9 1.4 3.6 1.1.1-.8.4-1.4.8-1.7-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .4.2.7.8.6A11.3 11.3 0 0 0 12 .7Z"/></svg></a>
+            <a href="/discord" aria-label="Discord"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.3 4.4A17 17 0 0 0 16.2 3l-.5 1a15 15 0 0 0-7.4 0l-.5-1a17 17 0 0 0-4.1 1.4C1.1 8.3.4 12.1.8 15.8a17 17 0 0 0 5 2.5l1.2-1.6a10 10 0 0 1-1.9-.9l.5-.4a12.2 12.2 0 0 0 12.8 0l.5.4a12 12 0 0 1-1.9.9l1.2 1.6a17 17 0 0 0 5-2.5c.5-4.3-.8-8.1-2.9-11.4ZM8.4 13.5c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.9.9 1.8 2c0 1.1-.8 2-1.8 2Zm7.2 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.9.9 1.8 2c0 1.1-.8 2-1.8 2Z"/></svg></a>
+          </div>
+        </div>
+        <nav class="footer-column" aria-label="Product">
+          <strong data-i18n="footer.productHeading">Product</strong>
+          <a href="#features" data-i18n="nav.features">Features</a>
+          <a href="#loaders" data-i18n="nav.loaders">Loaders</a>
+          <a href="#compare" data-i18n="nav.compare">Compare</a>
+          <a href="#download" data-i18n="nav.download">Download</a>
+        </nav>
+        <nav class="footer-column" aria-label="Community">
+          <strong data-i18n="footer.communityHeading">Community</strong>
+          <a href="/discord">Discord</a>
+          <a href="/changelog" data-i18n="nav.changelog">Updates</a>
+          <a href="https://github.com/NamLauncher/NamLauncher" target="_blank" rel="noopener" data-i18n="signing.source">Public source</a>
+          <a href="https://nattapat2871.me" rel="me" data-i18n="actions.mainSite">Main website</a>
+        </nav>
+        <nav class="footer-column" aria-label="Help and information">
+          <strong data-i18n="footer.helpHeading">Help & information</strong>
+          <a href="/how-to-install" data-i18n="nav.install">Install guide</a>
+          <a href="/legal" data-i18n="nav.legal">Legal</a>
+          <a href="#code-signing-policy" data-i18n="download.codeSigningPolicy">Code signing policy</a>
+          <a href="https://github.com/NamLauncher/NamLauncher/issues" target="_blank" rel="noopener" data-i18n="footer.reportIssue">Report an issue</a>
+        </nav>
       </div>
-      <span class="footer-links" data-i18n-html="footer.links">
-        Main site: <a href="https://nattapat2871.me" rel="me">nattapat2871.me</a> /
-        <a href="/how-to-install">Installation guide</a> /
-        <a href="/discord">Discord</a> /
-        <a href="/legal">Terms & Privacy</a> /
-        <a href="#code-signing-policy">Code signing policy</a>
-      </span>
+      <div class="footer-bottom">
+        <p class="footer-copyright" data-footer-copyright>Copyright © <span data-current-year>2026</span> <a class="footer-owner" href="https://nattapat2871.me" rel="me">Nattapat2871</a>. All rights reserved.</p>
+        <p data-i18n="footer.disclaimer">NamLauncher is not an official Minecraft service and is not affiliated with Mojang or Microsoft.</p>
+        <a class="button button--primary footer-discord" href="/discord"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.3 4.4A17 17 0 0 0 16.2 3l-.5 1a15 15 0 0 0-7.4 0l-.5-1a17 17 0 0 0-4.1 1.4C1.1 8.3.4 12.1.8 15.8a17 17 0 0 0 5 2.5l1.2-1.6a10 10 0 0 1-1.9-.9l.5-.4a12.2 12.2 0 0 0 12.8 0l.5.4a12 12 0 0 1-1.9.9l1.2 1.6a17 17 0 0 0 5-2.5c.5-4.3-.8-8.1-2.9-11.4ZM8.4 13.5c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.9.9 1.8 2c0 1.1-.8 2-1.8 2Zm7.2 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.9.9 1.8 2c0 1.1-.8 2-1.8 2Z"/></svg><span data-i18n="footer.joinDiscord">Join our Discord</span></a>
+      </div>
     </footer>
 
   <script src="/assets/app.js?v=release-20260914-1.2.3-site4" defer></script>
