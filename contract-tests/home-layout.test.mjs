@@ -1,6 +1,6 @@
 // Author/creator: nattapat2871 (https://nattapat2871.me)
 import assert from 'node:assert/strict'
-import { readFile } from 'node:fs/promises'
+import { access, readFile } from 'node:fs/promises'
 import test from 'node:test'
 
 const home = await readFile(new URL('../static/index.html', import.meta.url), 'utf8')
@@ -73,6 +73,20 @@ test('removes the synthetic instances mock-up and keeps real screenshots', () =>
   assert.doesNotMatch(home, /<section id="instances"/)
   assert.match(home, /<section id="screenshots"/)
   assert.match(home, /namlauncher-gallery-instance-content\.png/)
+})
+
+test('adds the real NameMC skin library screen to the launcher gallery', async () => {
+  const screenshots = home.slice(home.indexOf('<section id="screenshots"'), home.indexOf('</section>', home.indexOf('<section id="screenshots"')))
+  assert.equal((screenshots.match(/class="screenshot-frame/g) || []).length, 9)
+  assert.match(screenshots, /namlauncher-gallery-skin-library\.png\?v=gallery-20260915/)
+  assert.match(screenshots, /data-i18n="screenshots\.skinLibrary\.title"/)
+  assert.match(app, /"screenshots\.skinLibrary\.open"/)
+  await access(new URL('../static/assets/namlauncher-gallery-skin-library.png', import.meta.url))
+})
+
+test('keeps the local ATLauncher comparison artwork available', async () => {
+  await access(new URL('../static/assets/brands/atlauncher-packs.webp', import.meta.url))
+  await access(new URL('../static/assets/brands/atlauncher.svg', import.meta.url))
 })
 
 test('places release trust immediately after features and uses one maintainer card', () => {
